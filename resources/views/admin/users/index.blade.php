@@ -1,49 +1,43 @@
-@extends('layouts.app')
+@extends('layouts.main')
+@section('title')
+<div class="app-page-title">
+    <div class="page-title-wrapper">
+        <div class="page-title-heading">
+            <div class="page-title-icon">
+                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                </i>
+            </div>
+            <div>Manage Users</div>
+        </div>
+    </div>
+</div>    
+@endsection
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+@section('content')   
+    <div class="row">
+        @foreach ($users as $user)
+        <div class="col-md-3 ">
             <div class="card">
-                <div class="card-header">Dashboard</div>
-
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Roles</th>
-                            <th scope="col">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                                <tr>
-                                    <th scope="row">{{$user->id}}</th>
-                                    <td>{{$user->name}}</td>
-                                    <td>{{$user->email}}</td>
-                                    <td>{{implode(', ',$user->roles()->get()->pluck('name')->toArray())}}</td>
-                                    <td>
-                                        @can('edit-users')
-                                            <a href="{{ route('admin.users.edit', $user->id)}}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
-                                        @endcan
-                                        @can('delete-users')
-                                        <form action="{{ route('admin.users.destroy', $user)}}" method="POST" class="float-left">
-                                            @csrf
-                                            {{method_field('DELETE')}}
-                                            <button type="submit" class="btn btn-warning">Delete</button>
-                                        </form>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                      </table>
+                    <h4 class="card-title">{{$user->name}}</h4>
+                    <h5>{{$user->email}}</h5>
+                    <h6>{{implode(', ',$user->roles()->get()->pluck('name')->toArray())}}</h6>
+                    <hr>
+                    <div class="position-relative form-group">
+                        @can('edit-users')
+                            <a href="{{ route('admin.users.edit', $user->id)}}"><button type="button" class="btn btn-primary btn-block">Modify</button></a>
+                        @endcan
+                        @can('delete-users')
+                        <form action="{{ route('admin.users.destroy', $user)}}" method="POST">
+                            @csrf
+                            {{method_field('DELETE')}}
+                            <button type="submit" class="btn btn-warning btn-block mt-1">Delete</button>
+                        </form>
+                        @endcan
+                    </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
-</div>
 @endsection
