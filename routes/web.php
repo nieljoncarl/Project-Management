@@ -13,3 +13,10 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:mana
     Route::resource('/users', 'UsersController', ['except' => ['show','create','store']]);
 
 });
+
+
+Route::resource('/project', 'ProjectsController');
+Route::resource('/task', 'TasksController');
+Route::resource('/file', 'FilesController');
+Route::resource('/contact', 'ContactsController');
+Route::resource('/company', 'CompaniesController');

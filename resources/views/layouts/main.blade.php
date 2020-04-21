@@ -428,13 +428,13 @@
                                 </li>
                                 <li class="app-sidebar__heading">Management</li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('project.index') }}" class="{{ Request::is('project') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-book"></i>
                                         Projects
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('task.index') }}" class="{{ Request::is('task') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-tasks"></i>
                                         Tasks
                                     </a>
@@ -446,7 +446,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('file.index') }}" class="{{ Request::is('file') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-folder-open"></i>
                                         Files
                                     </a>
