@@ -7,7 +7,7 @@
                 <i class="pe-7s-users icon-gradient bg-plum-plate">
                 </i>
             </div>
-            <div>Files</div>
+            <div>Companies</div>
         </div>
     </div>
 </div>    

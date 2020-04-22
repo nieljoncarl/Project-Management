@@ -1,4 +1,17 @@
 @extends('layouts.main')
+@section('title')
+<div class="app-page-title">
+    <div class="page-title-wrapper">
+        <div class="page-title-heading">
+            <div class="page-title-icon">
+                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                </i>
+            </div>
+            <div>Tasks</div>
+        </div>
+    </div>
+</div>    
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ContactsController extends Controller
+class CalendarsController extends Controller
 {
     public function __construct()
     {
@@ -17,7 +18,7 @@ class ContactsController extends Controller
      */
     public function index()
     {
-        return view('contact.index');
+        return view('calendar.index');
     }
 
     /**

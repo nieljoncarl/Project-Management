@@ -440,7 +440,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('calendar.index') }}" class="{{ Request::is('calendar') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-calendar"></i>
                                         Calendar
                                     </a>
@@ -462,26 +462,26 @@
                                 @endcan
                                 <li class="app-sidebar__heading">External</li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('company.index') }}" class="{{ Request::is('company') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-building"></i>
                                         Companies
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('contact.index') }}" class="{{ Request::is('contact') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-address-book"></i>
                                         Contacts
                                     </a>
                                 </li>
                                 <li class="app-sidebar__heading">Financial</li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('budget.index') }}" class="{{ Request::is('budget') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-wallet"></i>
                                         Budget Requests
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="index.html" class="">
+                                    <a href="{{ route('liquidation.index') }}" class="{{ Request::is('liquidation') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-file-alt"></i>
                                         Liquidation Reports
                                     </a>

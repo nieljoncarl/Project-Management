@@ -20,3 +20,6 @@ Route::resource('/task', 'TasksController');
 Route::resource('/file', 'FilesController');
 Route::resource('/contact', 'ContactsController');
 Route::resource('/company', 'CompaniesController');
+Route::resource('/calendar', 'CalendarsController');
+Route::resource('/budget', 'BudgetsController');
+Route::resource('/liquidation', 'LiquidationsController');
