@@ -4,7 +4,7 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                <i class="fa fa-users icon-gradient bg-plum-plate">
                 </i>
             </div>
             <div>Manage Users</div>

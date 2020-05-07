@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Task;
+use App\Project;
 
 class TasksController extends Controller
 {
@@ -38,7 +40,33 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            'start' => 'required',
+            'end' => 'required',
+        ]);
+        
+        $task = new Task;
+        $task->name = $request->input('name');
+        $task->description = $request->input('description');
+        $task->status = $request->input('status');
+        $task->start = $request->input('start');
+        $task->end = $request->input('end');
+        
+        if($task->save())
+        {
+            $request->session()->flash('success','Task Added!');
+        }
+
+        $project = Project::find($request->input('project_id'));
+        $task->projects()->attach($project);
+
+        activity()->performedOn($task)
+                ->log('Added a new task');
+
+        return redirect()->route('project.show', $request->input('project_id'));
     }
 
     /**

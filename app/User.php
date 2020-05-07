@@ -41,6 +41,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role')->withTimestamps();
     }
 
+
     public function hasAnyRoles($roles){
 
         if($this->roles()->whereIn('name',$roles)->first()){
@@ -58,4 +59,18 @@ class User extends Authenticatable
         return false;
 
     }
+    
+    public function projects(){
+        return $this->belongsToMany('App\Project')->withTimestamps()->withPivot('type');
+    }
+
+    public function hasAnyProject($project){
+
+        if($this->projects()->where('project_user.type',$project)->first()){
+            return true;
+        }
+        return false;
+
+    }
+
 }

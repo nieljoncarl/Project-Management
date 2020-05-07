@@ -8,7 +8,13 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+  
     <script src="{{ asset('js/main.js') }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -69,7 +75,7 @@
                                     <div class="widget-content-left">
                                         <div class="btn-group">
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                                <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg" alt="">
+                                                <img width="42" class="rounded-circle" src="{{Auth::user()->avatar}}" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
                                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
@@ -95,11 +101,11 @@
                                             {{implode(', ',Auth::user()->roles()->get()->pluck('name')->toArray())}}
                                         </div>
                                     </div>
-                                    <div class="widget-content-right header-user-info ml-3">
+                                    {{-- <div class="widget-content-right header-user-info ml-3">
                                         <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
                                             <i class="fa text-white fa-calendar pr-1 pl-1"></i>
                                         </button>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>        
@@ -416,7 +422,8 @@
                                 </span>
                             </button>
                         </span>
-                    </div>    <div class="scrollbar-sidebar">
+                    </div>    
+                    <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">Dashboard</li>
@@ -426,62 +433,80 @@
                                         Dashboard
                                     </a>
                                 </li>
-                                <li class="app-sidebar__heading">Management</li>
                                 <li>
-                                    <a href="{{ route('project.index') }}" class="{{ Request::is('project') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('project.index') }}" class="{{ Request::is('project*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-book"></i>
                                         Projects
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('task.index') }}" class="{{ Request::is('task') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('task.index') }}" class="{{ Request::is('task*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-tasks"></i>
                                         Tasks
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('calendar.index') }}" class="{{ Request::is('calendar') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('calendar.index') }}" class="{{ Request::is('calendar*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-calendar"></i>
                                         Calendar
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('file.index') }}" class="{{ Request::is('file') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('file.index') }}" class="{{ Request::is('file*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-folder-open"></i>
                                         Files
                                     </a>
                                 </li>
+                                @can('manage-officer')
+                                    <li class="app-sidebar__heading">Officer Only</li>
+                                @endcan
+                                @can('manage-funding')
+                                    <li>
+                                        <a href="{{ route('funding.index') }}" class="{{ Request::is('funding*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-hand-holding-usd"></i>
+                                            Funding Agencies
+                                        </a>
+                                    </li>
+                                @endcan
                                 
                                 @can('manage-users')
                                     <li>
-                                        <a href="{{ route('admin.users.index') }}" class="{{ Request::is('admin/users') ? 'mm-active' : '' }}">
+                                        <a href="{{ route('admin.users.index') }}" class="{{ Request::is('admin/users*') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon fa fa-users"></i>
                                             Users
                                         </a>
                                     </li>
                                 @endcan
+                                @can('view-logs')
+                                    <li>
+                                        <a href="{{ route('log.index') }}" class="{{ Request::is('logs*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-clipboard"></i>
+                                            Logs
+                                        </a>
+                                    </li>
+                                @endcan
                                 <li class="app-sidebar__heading">External</li>
                                 <li>
-                                    <a href="{{ route('company.index') }}" class="{{ Request::is('company') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('company.index') }}" class="{{ Request::is('company*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-building"></i>
                                         Companies
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('contact.index') }}" class="{{ Request::is('contact') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('contact.index') }}" class="{{ Request::is('contact*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-address-book"></i>
                                         Contacts
                                     </a>
                                 </li>
                                 <li class="app-sidebar__heading">Financial</li>
                                 <li>
-                                    <a href="{{ route('budget.index') }}" class="{{ Request::is('budget') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('budget.index') }}" class="{{ Request::is('budget*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-wallet"></i>
                                         Budget Requests
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('liquidation.index') }}" class="{{ Request::is('liquidation') ? 'mm-active' : '' }}">
+                                    <a href="{{ route('liquidation.index') }}" class="{{ Request::is('liquidation*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-file-alt"></i>
                                         Liquidation Reports
                                     </a>
@@ -495,6 +520,7 @@
                         @yield('title')
                         @include('partials/alerts')
                         @yield('content')
+                        @yield('scripts')
                     </div>
                 </div>
             </div>

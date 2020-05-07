@@ -23,3 +23,10 @@ Route::resource('/company', 'CompaniesController');
 Route::resource('/calendar', 'CalendarsController');
 Route::resource('/budget', 'BudgetsController');
 Route::resource('/liquidation', 'LiquidationsController');
+Route::resource('/user', 'UsersController');
+Route::resource('/funding', 'FundingAgenciesController');
+Route::resource('/log', 'LogsController');
+
+
+Route::get('/redirect', 'Auth\LoginController@redirectToProvider')->name('google');
+Route::get('/callback', 'Auth\LoginController@handleProviderCallback');

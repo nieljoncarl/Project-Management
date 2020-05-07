@@ -56,6 +56,10 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                                <a href="{{route('google')}}">
+                                    <img src="{{asset('images/btn_google_signin.png')}}" alt="Login with Google">
+                                </a>
+                                <br>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
@@ -63,8 +67,16 @@
                                     </a>
                                 @endif
                             </div>
+                            <hr>
                         </div>
                     </form>
+                </div>
+                <div class="card-footer text-muted">
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-md-4 offset-md-4">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
