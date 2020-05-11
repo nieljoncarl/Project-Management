@@ -15,6 +15,7 @@ class CreateFundingAgenciesTable extends Migration
     {
         Schema::create('funding_agencies', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name', 100)->default('Agency Name');
             $table->string('address', 100)->nullable()->default('Agency Address');
             $table->string('contact_name', 100)->nullable()->default('Main Contact');

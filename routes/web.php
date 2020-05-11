@@ -5,6 +5,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/redirect', 'Auth\LoginController@redirectToProvider')->name('google');
+Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -26,7 +28,10 @@ Route::resource('/liquidation', 'LiquidationsController');
 Route::resource('/user', 'UsersController');
 Route::resource('/funding', 'FundingAgenciesController');
 Route::resource('/log', 'LogsController');
+Route::resource('/report', 'ReportsController');
 
 
-Route::get('/redirect', 'Auth\LoginController@redirectToProvider')->name('google');
-Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
+
+Route::post('/getUsers','UsersController@getUsers')->name('users.getUsers');
+Route::post('/addUserTask','UsersController@addUserTask')->name('users.addUserTask');
+    

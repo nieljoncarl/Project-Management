@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 use App\Task;
 use App\Project;
+use Spatie\Activitylog\Models\Activity;
 
 class TasksController extends Controller
 {
@@ -19,7 +21,9 @@ class TasksController extends Controller
      */
     public function index()
     {
-        return view('task.index');
+        $user = Auth::user();
+        $tasks = $user->tasks()->get();
+        return view('task.index')->with('tasks', $tasks);
     }
 
     /**
@@ -43,30 +47,36 @@ class TasksController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-            'status' => 'required',
             'start' => 'required',
             'end' => 'required',
         ]);
-        
+        $user = Auth::user()->id;
+
         $task = new Task;
+        $task->project_id = $request->input('project_id');
+        $task->user_id = $user;
         $task->name = $request->input('name');
         $task->description = $request->input('description');
-        $task->status = $request->input('status');
+        $task->status = "2";
         $task->start = $request->input('start');
         $task->end = $request->input('end');
+
+        
         
         if($task->save())
         {
+            
+            $task->users()->attach($user);
             $request->session()->flash('success','Task Added!');
         }
+        $project = Project::find($task->project_id);
+        activity()->performedOn($project)
+                ->withProperties(['taskname' =>  $task->name, 'task_id' =>  $task->id ])
+                ->log('created');
 
-        $project = Project::find($request->input('project_id'));
-        $task->projects()->attach($project);
+        
 
-        activity()->performedOn($task)
-                ->log('Added a new task');
-
-        return redirect()->route('project.show', $request->input('project_id'));
+        return redirect()->route('project.show', $request->input('project_id')."#tab-task");
     }
 
     /**
@@ -75,9 +85,16 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Task $task)
     {
-        //
+        activity()->performedOn($task)
+        ->log('viewed');
+
+        $logs = Activity::where('subject_type' , 'App\Task')->where('subject_id' , $task->id)->orderby('created_at', 'desc')->get();
+        return view('task.show')->with([
+                                'task' => $task,
+                                'logs' => $logs
+                                ]);
     }
 
     /**
@@ -86,11 +103,12 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        //
+        return view('task.edit')->with([
+                                'task' => $task
+                                ]);
     }
-
     /**
      * Update the specified resource in storage.
      *

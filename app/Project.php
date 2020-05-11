@@ -16,6 +16,10 @@ class Project extends Model
     
     protected static $logAttributes = ['name', 'description', 'outcomes', 'start', 'end', 'status'];
 
+    
+    public function user(){
+        return $this->hasOne('App\User', 'id', 'user_id');
+    }
     public function users(){
         return $this->belongsToMany('App\User')->withTimestamps()->withPivot('type');
     } 

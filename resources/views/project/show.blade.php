@@ -70,63 +70,138 @@
     <div class="mb-3 card">
         <div class="card-header">
             <ul class="nav nav-justified">
-                <li class="nav-item"><a data-toggle="tab" href="#tab-summary" class="nav-link show active">Summary</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-gantt" class="nav-link show">Gantt</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-task" class="nav-link show">Task List</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-files" class="nav-link show">Files</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-personel" class="nav-link show">Personel</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-report" class="nav-link show">Report</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-summary-link" href="#tab-summary" class="nav-link show active">Summary</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-gantt" class="nav-link">Gantt</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-task-link" href="#tab-task" class="nav-link">Task</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-files" class="nav-link">Files</a></li>
+                {{-- <li class="nav-item"><a data-toggle="tab" href="#tab-personel" class="nav-link">Personel</a></li> --}}
+                <li class="nav-item"><a data-toggle="tab" href="#tab-report" class="nav-link">Report</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-logs" class="nav-link">Logs</a></li>
             </ul>
         </div>
         <div class="card-body">
             <div class="tab-content">
                 <div class="tab-pane show active" id="tab-summary" role="tabpanel">
-                    
-                    <div class="col-sm-12 col-lg-7">
-                        <div class="card-hover-shadow-2x mb-3 card">
-                            <div class="card-header-tab card-header">
-                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Project Information</div>
-                            </div>
-                            <div class="card-body">
-                                <div class="scroll-area-lg">
-                                    <div class="p-2">
-                                        <h6>Project Duration: {{$project->start}} - {{$project->end}}</h6>
-                                        <h5>Project Desciption: {{$project->description}}</h5>
-                                        <h5>Project Outcomes: {{$project->outcomes}}</h5>
+                    <div class="row">
+                        <div class="col-md-8 mb-4">
+                            <div class="main-card mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title">Project Information</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-lg">
+                                        <div class="row">
+                                            <div class="col-md-8 mb-4">
+                                                <h6><b>Project Description: </b></h6>
+                                                {!!$project->description!!}
+                                                <hr>
+                                                <h6><b>Project Outcomes:</b></h6>
+                                                {!!$project->outcomes!!}
+                                            </div>
+                                            <div class="col-md-4">
+                                                
+                                                <h6><b>Project Duration:</b></h6>
+                                                {{$project->start}} - {{$project->end}}
+                                                <hr>
+                                                <h6><b>Project Created:</b></h6>
+                                                {{$project->created_at}}
+                                                <hr>
+                                                <h6><b>Project Created By:</b></h6>
+                                                {{$project->user->name}}
+                                            </div>
+                                        </div>
                                     </div>
-                                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title">Project Personnel</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-lg scrollhere">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                                @foreach ($project->users()->get() as $user)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-3">
+                                                                <img width="40" class="rounded-circle" src="{{$user->avatar}}" alt="">
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">
+                                                                    {{$user->name}}
+                                                                </div>
+                                                                <div class="widget-subheading">
+                                                                    {{$user->pivot->type}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-gantt" role="tabpanel">
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-body">
+                                    <div class="scroll-area-xl">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <div id="container" width="100%" height="80%"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane show" id="tab-gantt" role="tabpanel">
-                    No Gantt
                 </div>
                 <div class="tab-pane show" id="tab-task" role="tabpanel">
                     <div class="row">
                         <div class="col-sm-12 col-lg-7">
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-header-tab card-header">
-                                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon fa fa-tasks"> </i>Tasks List</div>
+                                    <div class="card-header-title text-capitalize font-weight-bold"><i class="header-icon fa fa-tasks"> </i>TASKLIST</div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="scroll-area-xl">
-                                        <div class="p-2">
-                                            <ul class="todo-list-wrapper list-group list-group-flush">
-                                                @foreach ($project->tasks()->orderBy('start', 'asc')->get() as $task)
+                                <div class="card-body ">
+                                    <div class="scroll-area-lg">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($tasks as $task)
                                                 <li class="list-group-item">
                                                     <div class="widget-content p-0">
                                                         <div class="widget-content-wrapper">
                                                             <div class="widget-content-left">
                                                                 <div class="widget-heading">{{$task->name}}
-                                                                    <div class="badge badge-primary ml-2">
-                                                                        {{$task->status}}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="widget-subheading"><i>User Involve - {{$task->start}} - {{$task->end}}</i></div>
+                                                                    @if($task->status=="1")
+                                                                        <div class="badge badge-default">Proposal</div>
+                                                                    @elseif($task->status=="2")
+                                                                        <div class="badge badge-info">Pending</div>    
+                                                                    @elseif($task->status=="3")
+                                                                        <div class="badge badge-warning">Approved</div>    
+                                                                    @elseif($task->status=="4")
+                                                                        <div class="badge badge-primary">In Progress</div>     
+                                                                    @elseif($task->status=="5")
+                                                                        <div class="badge badge-success">Completed</div>   
+                                                                    @endif
+                                                                                            </div>
+                                                                <div class="widget-subheading">{{implode(', ',$task->users()->get()->pluck('name')->toArray())}} </div>
+                                                                <div class="widget-subheading"><i>{{$task->start}} - {{$task->end}}</i></div>
                                                             </div>
                                                             <div class="widget-content-right widget-content-actions">
-                                                                <a href="http://"><button class="border-0 btn-transition btn btn-outline-primary">
+                                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
                                                                     <i class="fa fa-eye"></i>
                                                                 </button></a>
                                                                 <a href="http://"><button class="border-0 btn-transition btn btn-outline-primary">
@@ -150,110 +225,151 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-lg-5">
-                            <div class="card-hover-shadow-2x mb-3 card">
-                                <div class="card-header-tab card-header">
-                                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="header-icon fa fa-edit "> </i>Create Task</div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="scroll-area-xl">
-                                        <form action="{{ route('task.store')}}" method="post" class="">
-                                            @csrf
-                                            <input name="project_id" type="hidden" value="{{$project->id}}">
-                                            <div class="form-row">
-                                                <div class="col-md-8">
-                                                    <div class="position-relative form-group">
-                                                        <label for="name" class="">Task Name</label>
-                                                        <input name="name" id="name" placeholder="Task Name" type="text" class="form-control">
+                            <form action="{{ route('task.store')}}" method="post" class="">
+                                <div class="card-hover-shadow-2x mb-3 card">
+                                    <div class="card-header-tab card-header">
+                                        <div class="card-header-title text-capitalize font-weight-normal"><i class="header-icon fa fa-edit "> </i>CREATE TASK</div>
+                                        <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                                            
+                                            <button class="btn btn-success">Submit</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="scroll-area-lg">
+                                            <div class="scrollbar-container ps ps--active-y">
+                                                @csrf
+                                                <input name="project_id" type="hidden" value="{{$project->id}}">
+                                                <div class="form-row">
+                                                    <div class="col-md-12">
+                                                        <div class="position-relative form-group">
+                                                            <label for="name" class="">Task Name</label>
+                                                            <input name="name" id="name" placeholder="Task Name" type="text" class="form-control">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="position-relative form-group">
-                                                        <label for="status" class="">Task Status</label>
-                                                        <select name="status" id="status" class="custom-select">
-                                                            <option value="Not Started">Not Started</option>
-                                                            <option value="In Progress">In Progress</option>
-                                                            <option value="Finished">Finished</option>
-                                                        </select>
+                                                <div class="form-row">
+                                                    <div class="col-md-12">
+                                                        <div class="position-relative form-group">
+                                                            <label for="task_desc" class="">Task Description</label>
+                                                            <textarea name="description" id="task_desc" value="  " class="form-control"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-md-12">
-                                                    <div class="position-relative form-group">
-                                                        <label for="task_desc" class="">Task Description</label>
-                                                        <textarea name="description" id="task_desc" value="  " class="form-control" rows="5"></textarea>
+                                                <div class="form-row">
+                                                    <div class="col-md-6">
+                                                        <div class="position-relative form-group">
+                                                            <label for="start" class="">Project Start</label>
+                                                            <div class="input-group date" id="start" data-target-input="nearest">
+                                                                <input type="text" name="start" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#start" readonly/>
+                                                                <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
+                                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-md-6">
-                                                    <div class="position-relative form-group">
-                                                        <label for="start" class="">Project Start</label>
-                                                        <div class="input-group date" id="start" data-target-input="nearest">
-                                                            <input type="text" name="start" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#start" readonly/>
-                                                            <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
-                                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                    <div class="col-md-6">
+                                                        <div class="position-relative form-group">
+                                                            <label for="end" class="">Project End</label>
+                                                            <div class="input-group date" id="end" data-target-input="nearest">
+                                                                <input type="text" name="end" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#end" readonly/>
+                                                                <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="position-relative form-group">
-                                                        <label for="end" class="">Project End</label>
-                                                        <div class="input-group date" id="end" data-target-input="nearest">
-                                                            <input type="text" name="end" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#end" readonly/>
-                                                            <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
-                                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="row justify-content-center">
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-center">
-                                                <button class="btn btn-success">Save</button>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane show" id="tab-files" role="tabpanel">
-                    <div class="col-sm-12 col-lg-7">
-                        <div class="card-hover-shadow-2x mb-3 card">
-                            <div class="card-header-tab card-header">
-                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Project Information</div>
-                            </div>
-                            <div class="card-body">
-                                <div class="scroll-area-lg">
-                                    <div class="p-2">
-                                        <h6>Project Duration: {{$project->start}} - {{$project->end}}</h6>
-                                        <h5>Project Desciption: {{$project->description}}</h5>
-                                        <h5>Project Outcomes: {{$project->outcomes}}</h5>
-                                    </div>
-                                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane" id="tab-files" role="tabpanel">
                 </div>
-                <div class="tab-pane show" id="tab-personel" role="tabpanel">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>Project Personel</h4>
-                            <hr>
-                            @foreach ($project->users()->get() as $user)
-                            <tr>
-                                <td width="50%">{{$user->name}}</td>
-                                <td width="50%">{{$user->pivot->type}}</td>
-                            </tr>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane show" id="tab-report" role="tabpanel">
+                <div class="tab-pane" id="tab-report" role="tabpanel">
                     <div class="col-sm-12 col-lg-7">
 
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-logs" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title">General Logs</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-xl scrollhere">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                                @foreach ($logs as $log)
+                                                @if(empty($log->getExtraProperty("taskname")))
+                                                <li class="list-group-item">
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-3">
+                                                                <img width="40" class="rounded-circle" src="{{$log->causer->avatar}}" alt="">
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">
+                                                                    {{$log->causer->name}} {{$log->description}} this project.
+                                                                </div>
+                                                                <div class="widget-subheading">
+                                                                    {{$log->created_at}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title">Task Related Logs</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-xl scrollhere">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                                @foreach ($logs as $log)
+                                                @if(empty($log->getExtraProperty("taskname")))
+                                                @else
+                                                <li class="list-group-item">
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-3">
+                                                                <img width="40" class="rounded-circle" src="{{$log->causer->avatar}}" alt="">
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">
+                                                                    {{$log->causer->name}} {{$log->description}} <a href="{{ route('task.show', $log->getExtraProperty('task_id'))}}">{{$log->getExtraProperty("taskname")}}</a> task on this project.
+                                                                </div>
+                                                                <div class="widget-subheading">
+                                                                    {{$log->created_at}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -267,12 +383,14 @@
     $(function () {
         $('#start').datetimepicker({
             format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
+            ignoreReadonly: true,
+            pickSeconds: false
         });
         $('#end').datetimepicker({
             useCurrent: false,
             format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
+            ignoreReadonly: true,
+            pickSeconds: false
         });
         $("#start").on("change.datetimepicker", function (e) {
             $('#end').datetimepicker('minDate', e.date);
@@ -281,5 +399,180 @@
             $('#start').datetimepicker('maxDate', e.date);
         });
     });
+
+    CKEDITOR.replace( 'task_desc' );
+    $(document).ready(function () 
+    {
+        
+        if (window.location.hash == '#tab-task') {
+            $("#tab-summary-link").removeClass('active');
+            $('div#tab-summary').removeClass('active');
+            $('#tab-task-link').addClass('active');
+            $('div#tab-task').addClass('show active');
+        }
+    });
+
 </script>
+<script>
+    var today = new Date(),
+        day = 1000 * 60 * 60 * 24,
+        dateFormat = Highcharts.dateFormat,
+        defined = Highcharts.defined,
+        isObject = Highcharts.isObject,
+        reduce = Highcharts.reduce;
+    
+    today.setUTCHours(8);
+    today.setUTCMinutes(0);
+    today.setUTCSeconds(0);
+    today.setUTCMilliseconds(0);
+    today = today.getTime();
+    var assigned = '';
+    Highcharts.ganttChart('container', {
+            xAxis: {
+            currentDateIndicator: true,
+            min: today - 3 * day,
+            max: today + 18 * day
+            },
+            yAxis: {
+                uniqueNames: true,
+            },
+            navigator: {
+                enabled: true,
+                liveRedraw: true,
+                series: {
+                    type: 'gantt',
+                    pointPlacement: 0.3,
+                    pointPadding: 0.1
+                },
+                yAxis: {
+                    min: 0,
+                    max: 3,
+                    reversed: true,
+                    categories: []
+                }
+            },
+            rangeSelector: {
+                enabled: true,
+                selected: 1
+            },
+    
+            series: [{
+            name: '{{$project->alias}}',
+            data: [
+                    @foreach($tasks as $task)
+                    {
+    
+                    name: '<a href="{{route("task.show", $task->id)}}">{{$task->name}}</a>',
+                    id: '{{$task->id}}',
+                    start: (new Date("{{$task->start}}")).getTime(),
+                    end: (new Date("{{$task->end}}")).getTime(),
+                    completed: {
+                        amount: @if ($task->status==1)
+                                    '0'
+                                @elseif($task->status==2)
+                                    '1'
+                                @elseif($task->status==3)
+                                    '10'
+                                @elseif($task->status==4)
+                                    '50'
+                                @elseif($task->status==5)
+                                    '100'
+                                @endif /100,
+                        fill: '#00aa00'
+                    },
+                    owner:  '{{implode(', ',$task->users()->get()->pluck('name')->toArray())}}',
+
+                    color: @if ($task->status==1)
+                                '#000000'
+                            @elseif($task->status==2)
+                                '#16aaff'
+                            @elseif($task->status==3)
+                                '#f7b924'
+                            @elseif($task->status==4)
+                                '#3f6ad8'
+                            @elseif($task->status==5)
+                                '#3ac47d'
+                            @endif
+                            },
+                    @endforeach
+                ]},
+        ],
+            plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function (e) {
+                    window.location = '/task/'+this.options.id;
+                        }
+                    }
+                },
+                marker: {
+                    lineWidth: 1
+                }
+            }
+        },
+        
+        tooltip: {
+            style: {
+                pointerEvents: 'auto'
+            },
+            pointFormatter: function () {
+                var point = this,
+                    format = '%b-%d-%Y %H:%m', //'%e. %b',
+                    options = point.options,
+                    completed = options.completed,
+                    amount = isObject(completed) ? completed.amount : completed,
+                    status = ((amount || 0) * 100) + '%',
+                    lines;
+    
+                lines = [{
+                    value: point.name,
+                    style: 'font-weight: bold;'
+                }, {
+                    title: 'Start',
+                    value: dateFormat(format, point.start)
+                }, {
+                    visible: !options.milestone,
+                    title: 'End',
+                    value: dateFormat(format, point.end)
+                }, {
+                    title: 'Completed',
+                    value: status
+                }, {
+                    title: 'Resource',
+                    value: options.owner || 'unassigned'
+                }];
+    
+                return reduce(lines, function (str, line) {
+                    var s = '',
+                        style = (
+                            defined(line.style) ? line.style : 'font-size: 1em;'
+                        );
+                    if (line.visible !== false) {
+                        s = (
+                            '<span style="' + style + '">' +
+                            (defined(line.title) ? line.title + ': ' : '') +
+                            (defined(line.value) ? line.value : '') +
+                            '</span><br/>'
+                        );
+                    }
+                    return str + s;
+                }, '');
+            }
+        },
+        title: {
+            text: '{{$project->name}}'
+        },
+        subtitle: {
+            text: '{{$project->alias}}'
+        },
+        chart:{
+            scrollablePlotArea: {
+            minHeight: 100,
+            scrollPositionY: 0
+            }
+        }
+    });
+    </script>
 @endsection

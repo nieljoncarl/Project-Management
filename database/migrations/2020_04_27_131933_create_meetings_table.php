@@ -15,6 +15,10 @@ class CreateMeetingsTable extends Migration
     {
         Schema::create('meetings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->default(12);
+            $table->bigInteger('user_check_id')->unsigned()->nullable();
+            $table->bigInteger('user_approve_id')->unsigned()->nullable();
+            $table->bigInteger('user_deny_id')->unsigned()->nullable();
             $table->string('name', 100)->default('Meeting Name');
             $table->string('type', 100)->nullable()->default('Meeting Type');
             $table->string('location', 100)->nullable()->default('Meeting Location');

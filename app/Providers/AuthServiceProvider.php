@@ -49,7 +49,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('manage',function($user){
-            return $user->hasAnyProject(['Creator']);
+            return $user->hasAnyRoles(['Catalyst Officer']);
         });
     }
 }

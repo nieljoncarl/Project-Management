@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Project;
 use Auth;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Http\Request;
+use App\Project;
+use App\Task;
+use App\Status;
 
 class ProjectsController extends Controller
 {
@@ -20,7 +22,17 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        //$projects = Project::all();
+
+        $user = Auth::user();
+        if($user->hasRole('Catalyst Officer'))
+        {
+            $projects = Project::all();
+        }
+        else
+        {
+            $projects = $user->projects()->get();
+        }
         return view('project.index')->with('projects', $projects);
     }
 
@@ -52,11 +64,12 @@ class ProjectsController extends Controller
         ]);
         
         $project = new Project;
+        $project->user_id = Auth::user()->id;
         $project->name = $request->input('name');
         $project->alias = $request->input('alias');
         $project->description = $request->input('description');
         $project->outcomes = $request->input('outcomes');
-        $project->status = $request->input('status');
+        $project->status = "2";
         $project->start = $request->input('start');
         $project->end = $request->input('end');
         
@@ -67,11 +80,6 @@ class ProjectsController extends Controller
 
         $creator = Auth::user();
         $project->users()->attach($creator,['user_id' => $creator->id,'type' => "Creator" ]);
-
-        activity()->performedOn($project)
-                ->causedBy($creator)
-                ->log('Added a new Project');
-
         return redirect()->route('project.index');
     }
 
@@ -85,7 +93,16 @@ class ProjectsController extends Controller
     {        
         activity()->performedOn($project)
                 ->log('viewed');
-        return view('project.show')->with('project',$project);
+        
+        $logs = Activity::where('subject_type' , 'App\Project')->where('subject_id' , $project->id)->orderby('created_at', 'desc')->get();
+        $tasks = Task::where('project_id', $project->id)->get();
+        $statuses = Status::all();
+        return view('project.show')->with([
+            'project' => $project, 
+            'logs' => $logs,
+            'tasks' => $tasks,
+            'statuses' => $statuses
+            ]);
     }
 
     /**
@@ -97,7 +114,9 @@ class ProjectsController extends Controller
     public function edit($id)
     {
         $project = Project::find($id);
-        return view('project.edit')->with('project',$project);
+        $statuses = Status::all();
+        return view('project.edit')->with(['project' => $project, 
+        'statuses' => $statuses]);
     }
 
     /**

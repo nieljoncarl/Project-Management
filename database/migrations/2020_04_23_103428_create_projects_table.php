@@ -15,13 +15,18 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->default(12);
+            $table->bigInteger('user_check_id')->unsigned()->nullable();
+            $table->bigInteger('user_approve_id')->unsigned()->nullable();
+            $table->bigInteger('user_deny_id')->unsigned()->nullable();
+            $table->bigInteger('funding_agency_id')->unsigned()->nullable();
             $table->string('name');
             $table->string('alias')->nullable();
             $table->longText('description')->nullable()->default('Project Description');
             $table->longText('outcomes')->nullable()->default('Project Outcomes');
             $table->timestamp('start')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));;
             $table->timestamp('end')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));;
-            $table->string('status')->nullable()->default('Pending');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
