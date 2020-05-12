@@ -7,7 +7,7 @@
                 <i class="fa fa-book icon-gradient bg-plum-plate">
                 </i>
             </div>
-            <div>Projects</div>
+            <div>Reports</div>
         </div>
         <div class="page-title-actions">
             <a href="{{ route('project.create')}}">
@@ -22,67 +22,81 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
-            <div class="main-card mb-3 card">
+        <div class="col-md-3 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Generate Task Report</div>
+                </div>
                 <div class="card-body">
-                    <div class="scroll-area-xl">
-                        <div class="table-responsive">
-                            <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Project Name</th>
-                                        <th class="text-center">Project Leader</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($projects as $project)
-                                    <tr>
-                                        <td>
-                                            <a href="{{route('project.show', $project)}}">
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading">{{$project->alias}}</div>
-                                                            <div class="widget-subheading opacity-7">{{$project->name}}</div>
-                                                        </div>
-                                                    </div>
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <form action="{{ route('project.store')}}" method="post" class="">
+                                @csrf
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label for="project_name" class="">Report Name</label>
+                                            <input name="name" id="project_name" placeholder="Report Name" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label for="start" class="">Date Start</label>
+                                            <div class="input-group date" id="start" data-target-input="nearest">
+                                                <input type="text" name="start" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#start" readonly/>
+                                                <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                                 </div>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{route('user.show', $project->users()->where('type', 'Creator')->first()->id)}}" class="btn btn-link btn-sm">
-                                                {{$project->users()->where('type', 'Creator')->first()->name}}
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            @if($project->status=="1")
-                                                <div class="badge badge-default">Proposal</div>
-                                            @elseif($project->status=="2")
-                                                <div class="badge badge-info">Pending</div>    
-                                            @elseif($project->status=="3")
-                                                <div class="badge badge-warning">Approved</div>    
-                                            @elseif($project->status=="4")
-                                                <div class="badge badge-primary">In Progress</div>     
-                                            @elseif($project->status=="5")
-                                                <div class="badge badge-success">Completed</div>   
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{route('project.edit', $project)}}" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label for="end" class="">Date End</label>
+                                            <div class="input-group date" id="end" data-target-input="nearest">
+                                                <input type="text" name="end" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#end" readonly/>
+                                                <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <button class="btn btn-success">Generate</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
+        
     </div>
+
+@endsection
+@section('scripts')
+<script type="text/javascript">
+    $(function () {
+        $('#start').datetimepicker({
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true
+        });
+        $('#end').datetimepicker({
+            useCurrent: false,
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true
+        });
+        $("#start").on("change.datetimepicker", function (e) {
+            $('#end').datetimepicker('minDate', e.date);
+        });
+        $("#end").on("change.datetimepicker", function (e) {
+            $('#start').datetimepicker('maxDate', e.date);
+        });
+    });
+</script>
 @endsection

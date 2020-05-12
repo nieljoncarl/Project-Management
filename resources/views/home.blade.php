@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('content')
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-6 col-xl-4">
         <div class="card mb-3 widget-content">
             <div class="widget-content-outer">
@@ -143,7 +143,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 <div class="row">

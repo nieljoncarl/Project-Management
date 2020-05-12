@@ -20,6 +20,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->middleware('can:mana
 Route::resource('/project', 'ProjectsController');
 Route::resource('/task', 'TasksController');
 Route::resource('/file', 'FilesController');
+Route::resource('/meeting', 'MeetingsController');
 Route::resource('/contact', 'ContactsController');
 Route::resource('/company', 'CompaniesController');
 Route::resource('/calendar', 'CalendarsController');

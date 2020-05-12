@@ -25,15 +25,8 @@ class ReportsController extends Controller
         //$projects = Project::all();
 
         $user = Auth::user();
-        if($user->hasRole('Catalyst Officer'))
-        {
-            $projects = Project::all();
-        }
-        else
-        {
-            $projects = $user->projects()->get();
-        }
-        return view('report.index')->with('projects', $projects);
+        $tasks = $user->tasks()->get();
+        return view('report.index')->with('tasks', $tasks);
     }
 
     /**

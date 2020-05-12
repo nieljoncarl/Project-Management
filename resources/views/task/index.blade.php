@@ -14,8 +14,130 @@
 @endsection
 @section('content')
     <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Active Tasks</div>
+                </div>
+                <div class="card-body">
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                @foreach ($tasks->where('status', '4')->sortBy('start') as $task)
+                                <li class="list-group-item">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">
+                                                    {{$task->name}}
+                                                </div>
+                                                <div class="widget-subheading">
+                                                    <div>Project: {{$task->project->alias}}</div>
+                                                    <div>Duration: {{$task->start}} - {{$task->end}} </div>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-right widget-content-actions">
+                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
+                                                    <i class="fa fa-eye"></i>
+                                                </button></a>
+                                                <button class="border-0 btn-transition btn btn-outline-success">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Approved Tasks</div>
+                </div>
+                <div class="card-body">
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                @foreach ($tasks->where('status', '3')->sortBy('start') as $task)
+                                <li class="list-group-item">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">
+                                                    {{$task->name}}
+                                                </div>
+                                                <div class="widget-subheading">
+                                                    <div>Project: {{$task->project->alias}}</div>
+                                                    <div>Duration: {{$task->start}} - {{$task->end}} </div>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-right widget-content-actions">
+                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
+                                                    <i class="fa fa-eye"></i>
+                                                </button></a>
+                                                <a href="http://"><button class="border-0 btn-transition btn btn-outline-primary">
+                                                    <i class="fa fa-play-circle"></i>
+                                                </button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Pending Tasks</div>
+                </div>
+                <div class="card-body">
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                @foreach ($tasks->where('status', '2')->sortBy('start') as $task)
+                                <li class="list-group-item">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">
+                                                    {{$task->name}}
+                                                </div>
+                                                <div class="widget-subheading">
+                                                    <div>Project: {{$task->project->alias}}</div>
+                                                    <div>Duration: {{$task->start}} - {{$task->end}} </div>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-right widget-content-actions">
+                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
+                                                    <i class="fa fa-eye"></i>
+                                                </button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="main-card mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Completed Tasks</div>
+                </div>
                 <div class="card-body">
                     <div class="scroll-area-xl">
                         <div class="table-responsive">
@@ -30,7 +152,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($tasks->sortBy('start')->sortBy('status') as $task)
+                                @foreach ($tasks->where('status', '5')->sortBy('status') as $task)
                                     <tr>
                                         <td>
                                             <a href="{{route('task.show', $task)}}">

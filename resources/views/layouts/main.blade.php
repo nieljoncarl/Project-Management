@@ -458,6 +458,12 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('meeting.index') }}" class="{{ Request::is('meeting*') ? 'mm-active' : '' }}">
+                                        <i class="metismenu-icon fa fa-handshake"></i>
+                                        Meetings
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ route('calendar.index') }}" class="{{ Request::is('calendar*') ? 'mm-active' : '' }}">
                                         <i class="metismenu-icon fa fa-calendar"></i>
                                         Calendar
@@ -475,34 +481,6 @@
                                         Reports
                                     </a>
                                 </li>
-                                @can('manage-officer')
-                                    <li class="app-sidebar__heading">Officer Only</li>
-                                @endcan
-                                @can('manage-funding')
-                                    <li>
-                                        <a href="{{ route('funding.index') }}" class="{{ Request::is('funding*') ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon fa fa-hand-holding-usd"></i>
-                                            Funding Agencies
-                                        </a>
-                                    </li>
-                                @endcan
-                                
-                                @can('manage-users')
-                                    <li>
-                                        <a href="{{ route('admin.users.index') }}" class="{{ Request::is('admin/users*') ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon fa fa-users"></i>
-                                            Users
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('view-logs')
-                                    <li>
-                                        <a href="{{ route('log.index') }}" class="{{ Request::is('logs*') ? 'mm-active' : '' }}">
-                                            <i class="metismenu-icon fa fa-clipboard"></i>
-                                            Logs
-                                        </a>
-                                    </li>
-                                @endcan
                                 <li class="app-sidebar__heading">External</li>
                                 <li>
                                     <a href="{{ route('company.index') }}" class="{{ Request::is('company*') ? 'mm-active' : '' }}">
@@ -529,6 +507,35 @@
                                         Liquidation Reports
                                     </a>
                                 </li>
+                                @can('manage-officer')
+                                    <li class="app-sidebar__heading">Officer Only</li>
+                                @endcan
+                                @can('manage-funding')
+                                    <li>
+                                        <a href="{{ route('funding.index') }}" class="{{ Request::is('funding*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-hand-holding-usd"></i>
+                                            Funding Agencies
+                                        </a>
+                                    </li>
+                                @endcan
+                                
+                                @can('manage-users')
+                                    <li class="app-sidebar__heading">Admin Only</li>
+                                    <li>
+                                        <a href="{{ route('admin.users.index') }}" class="{{ Request::is('admin/users*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-users"></i>
+                                            Users
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view-logs')
+                                    <li>
+                                        <a href="{{ route('log.index') }}" class="{{ Request::is('logs*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-clipboard"></i>
+                                            Logs
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </div>
