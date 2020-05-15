@@ -152,225 +152,119 @@
             <div class="card-header">
                 Active Projects
             </div>
-            
-            <div class="scroll-area-sm">
-                <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th>Name</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="text-center text-muted">#345</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">John Doe</div>
-                                            <div class="widget-subheading opacity-7">Web Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Madrid</td>
-                            <td class="text-center">
-                                <div class="badge badge-warning">Pending</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#347</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Ruben Tillman</div>
-                                            <div class="widget-subheading opacity-7">Etiam sit amet orci eget</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Berlin</td>
-                            <td class="text-center">
-                                <div class="badge badge-success">Completed</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#321</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Elliot Huber</div>
-                                            <div class="widget-subheading opacity-7">Lorem ipsum dolor sic</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">London</td>
-                            <td class="text-center">
-                                <div class="badge badge-danger">In Progress</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#55</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Vinnie Wagstaff</div>
-                                            <div class="widget-subheading opacity-7">UI Designer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Amsterdam</td>
-                            <td class="text-center">
-                                <div class="badge badge-info">On Hold</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="card-body">
+                <div class="scroll-area-md">
+                    <div class="scrollbar-container ps ps--active-y">
+                        <div class="table-responsive">
+                            <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th class="text-center">Project Leader</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($user->projects()->get() as $project)
+                                        <tr>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading"> {{$project->alias}} </div>
+                                                            <div class="widget-subheading opacity-7">{{$project->name}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center"> {{$project->user->name}} </td>
+                                            <td class="text-center">
+                                                @if($project->status=="1")
+                                                    <div class="badge badge-default">Proposal</div>
+                                                @elseif($project->status=="2")
+                                                    <div class="badge badge-info">Pending</div>    
+                                                @elseif($project->status=="3")
+                                                    <div class="badge badge-warning">Approved</div>    
+                                                @elseif($project->status=="4")
+                                                    <div class="badge badge-primary">In Progress</div>     
+                                                @elseif($project->status=="5")
+                                                    <div class="badge badge-success">Completed</div>   
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{route('project.show', $project)}}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="d-block text-center card-footer">
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="main-card mb-3 card">
             <div class="card-header">
-                User Tasks
+                Active Tasks
             </div>
-            <div class="scroll-area-sm">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th class="text-center">Task</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <div class="table-responsive">
-                        <tbody>
+            <div class="card-body">
+                <div class="scroll-area-md">
+                    <div class="scrollbar-container ps ps--active-y">
+                        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                            <thead>
                             <tr>
-                                <td>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left flex2">
-                                                <div class="widget-heading">John Doe</div>
-                                                <div class="widget-subheading opacity-7">Web Developer</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">Madrid</td>
-                                <td class="text-center">
-                                    <div class="badge badge-warning">Pending</div>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                                </td>
+                                <th>Name</th>
+                                <th class="text-center">Task</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Actions</th>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left flex2">
-                                                <div class="widget-heading">Ruben Tillman</div>
-                                                <div class="widget-subheading opacity-7">Etiam sit amet orci eget</div>
+                            </thead>
+                            <div class="table-responsive">
+                                <tbody>
+                                    @foreach ($user->tasks()->where('status', '4')->get() as $task)
+                                    <tr>
+                                        <td>
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-wrapper">
+                                                    <div class="widget-content-left flex2">
+                                                        <div class="widget-heading"> {{$task->name}} </div>
+                                                        <div class="widget-subheading opacity-7">{{$task->project->name}}</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">Berlin</td>
-                                <td class="text-center">
-                                    <div class="badge badge-success">Completed</div>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left flex2">
-                                                <div class="widget-heading">Elliot Huber</div>
-                                                <div class="widget-subheading opacity-7">Lorem ipsum dolor sic</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">London</td>
-                                <td class="text-center">
-                                    <div class="badge badge-danger">In Progress</div>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left flex2">
-                                                <div class="widget-heading">Vinnie Wagstaff</div>
-                                                <div class="widget-subheading opacity-7">UI Designer</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">Amsterdam</td>
-                                <td class="text-center">
-                                    <div class="badge badge-info">On Hold</div>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
-                                </td>
-                            </tr>
-                        </tbody>
+                                        </td>
+                                        <td class="text-center"> {{$task->user->name}} </td>
+                                        <td class="text-center">
+                                            @if($task->status=="1")
+                                                <div class="badge badge-default">Proposal</div>
+                                            @elseif($task->status=="2")
+                                                <div class="badge badge-info">Pending</div>    
+                                            @elseif($task->status=="3")
+                                                <div class="badge badge-warning">Approved</div>    
+                                            @elseif($task->status=="4")
+                                                <div class="badge badge-primary">In Progress</div>     
+                                            @elseif($task->status=="5")
+                                                <div class="badge badge-success">Completed</div>   
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{route('task.show', $task)}}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    
+                                </tbody>
+                            </div>
+                        </table>
                     </div>
-                    </table>
                 </div>
-            <div class="d-block text-center card-footer">
             </div>
         </div>
     </div>
@@ -379,126 +273,12 @@
     <div class="col-md-6">
         <div class="main-card mb-3 card">
             <div class="card-header">
-                Calendar Events
+                Today's Meetings
             </div>
             
-            <div class="scroll-area-sm">
+            <div class="scroll-area-md">
                 <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th>Name</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="text-center text-muted">#345</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">John Doe</div>
-                                            <div class="widget-subheading opacity-7">Web Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Madrid</td>
-                            <td class="text-center">
-                                <div class="badge badge-warning">Pending</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#347</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Ruben Tillman</div>
-                                            <div class="widget-subheading opacity-7">Etiam sit amet orci eget</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Berlin</td>
-                            <td class="text-center">
-                                <div class="badge badge-success">Completed</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#321</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Elliot Huber</div>
-                                            <div class="widget-subheading opacity-7">Lorem ipsum dolor sic</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">London</td>
-                            <td class="text-center">
-                                <div class="badge badge-danger">In Progress</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#55</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Vinnie Wagstaff</div>
-                                            <div class="widget-subheading opacity-7">UI Designer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Amsterdam</td>
-                            <td class="text-center">
-                                <div class="badge badge-info">On Hold</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-            <div class="d-block text-center card-footer">
             </div>
         </div>
     </div>
@@ -509,123 +289,9 @@
                 Recent Files
             </div>
             
-            <div class="scroll-area-sm">
+            <div class="scroll-area-md">
                 <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th>Name</th>
-                            <th class="text-center">City</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="text-center text-muted">#345</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">John Doe</div>
-                                            <div class="widget-subheading opacity-7">Web Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Madrid</td>
-                            <td class="text-center">
-                                <div class="badge badge-warning">Pending</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#347</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Ruben Tillman</div>
-                                            <div class="widget-subheading opacity-7">Etiam sit amet orci eget</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Berlin</td>
-                            <td class="text-center">
-                                <div class="badge badge-success">Completed</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#321</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Elliot Huber</div>
-                                            <div class="widget-subheading opacity-7">Lorem ipsum dolor sic</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">London</td>
-                            <td class="text-center">
-                                <div class="badge badge-danger">In Progress</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center text-muted">#55</td>
-                            <td>
-                                <div class="widget-content p-0">
-                                    <div class="widget-content-wrapper">
-                                        <div class="widget-content-left mr-3">
-                                            <div class="widget-content-left">
-                                                <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>
-                                        </div>
-                                        <div class="widget-content-left flex2">
-                                            <div class="widget-heading">Vinnie Wagstaff</div>
-                                            <div class="widget-subheading opacity-7">UI Designer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">Amsterdam</td>
-                            <td class="text-center">
-                                <div class="badge badge-info">On Hold</div>
-                            </td>
-                            <td class="text-center">
-                                <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
-            <div class="d-block text-center card-footer">
             </div>
         </div>
     </div>

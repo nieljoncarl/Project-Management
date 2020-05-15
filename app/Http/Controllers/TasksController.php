@@ -23,7 +23,8 @@ class TasksController extends Controller
     {
         $user = Auth::user();
         $tasks = $user->tasks()->get();
-        return view('task.index')->with('tasks', $tasks);
+        $completedtask = $user->tasks()->where('status', '5')->paginate('2');
+        return view('task.index')->with(['tasks' => $tasks, 'completedtask' => $completedtask]);
     }
 
     /**

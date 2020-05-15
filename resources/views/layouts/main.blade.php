@@ -481,19 +481,6 @@
                                         Reports
                                     </a>
                                 </li>
-                                <li class="app-sidebar__heading">External</li>
-                                <li>
-                                    <a href="{{ route('company.index') }}" class="{{ Request::is('company*') ? 'mm-active' : '' }}">
-                                        <i class="metismenu-icon fa fa-building"></i>
-                                        Companies
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('contact.index') }}" class="{{ Request::is('contact*') ? 'mm-active' : '' }}">
-                                        <i class="metismenu-icon fa fa-address-book"></i>
-                                        Contacts
-                                    </a>
-                                </li>
                                 <li class="app-sidebar__heading">Financial</li>
                                 <li>
                                     <a href="{{ route('budget.index') }}" class="{{ Request::is('budget*') ? 'mm-active' : '' }}">
@@ -509,12 +496,22 @@
                                 </li>
                                 @can('manage-officer')
                                     <li class="app-sidebar__heading">Officer Only</li>
-                                @endcan
-                                @can('manage-funding')
                                     <li>
                                         <a href="{{ route('funding.index') }}" class="{{ Request::is('funding*') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon fa fa-hand-holding-usd"></i>
                                             Funding Agencies
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('company.index') }}" class="{{ Request::is('company*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-building"></i>
+                                            Companies
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('contact.index') }}" class="{{ Request::is('contact*') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon fa fa-address-book"></i>
+                                            Contacts
                                         </a>
                                     </li>
                                 @endcan

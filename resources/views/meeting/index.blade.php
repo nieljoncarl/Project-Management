@@ -13,22 +13,54 @@
 </div>    
 @endsection
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Today's Meetings</div>
+                </div>
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+
+                            </ul>
                         </div>
-                    @endif
-                    You are logged in!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Upcoming Meetings</div>
+                </div>
+                <div class="card-body">
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">Past Meetings</div>
+                </div>
+                <div class="card-body">
+                    <div class="scroll-area-md scrollhere">
+                        <div class="scrollbar-container ps ps--active-y">
+                            <ul class="todo-list-wrapper list-group list-group-flush">
+
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

@@ -152,7 +152,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($tasks->where('status', '5')->sortBy('status') as $task)
+                                @foreach ($completedtask as $task)
                                     <tr>
                                         <td>
                                             <a href="{{route('task.show', $task)}}">
@@ -207,7 +207,9 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="card-footer">
+                    {{ $completedtask->links() }}
+                </div>
             </div>
         </div>
     </div>

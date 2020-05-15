@@ -25,8 +25,7 @@ class ReportsController extends Controller
         //$projects = Project::all();
 
         $user = Auth::user();
-        $tasks = $user->tasks()->get();
-        return view('report.index')->with('tasks', $tasks);
+        return view('report.index')->with('user', $user);
     }
 
     /**

@@ -102,7 +102,7 @@ class UsersController extends Controller
         exit;
     }
 
-    public function getUsersTask(Request $request)
+    public function getUserTask(Request $request)
     {
         $search = $request->search;
         if($search == ''){

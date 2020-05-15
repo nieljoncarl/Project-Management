@@ -34,5 +34,9 @@ Route::resource('/report', 'ReportsController');
 
 
 Route::post('/getUsers','UsersController@getUsers')->name('users.getUsers');
+
+
+Route::post('/getUserTask','UsersController@getUserTask')->name('users.getUserTask');
 Route::post('/addUserTask','UsersController@addUserTask')->name('users.addUserTask');
-    
+Route::post('/deleteUserTask','UsersController@deleteUserTask')->name('users.deleteUserTask');
+
