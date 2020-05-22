@@ -74,8 +74,8 @@
                 <li class="nav-item"><a data-toggle="tab" href="#tab-gantt" class="nav-link">Gantt</a></li>
                 <li class="nav-item"><a data-toggle="tab" id="tab-task-link" href="#tab-task" class="nav-link">Task</a></li>
                 <li class="nav-item"><a data-toggle="tab" href="#tab-files" class="nav-link">Files</a></li>
-                {{-- <li class="nav-item"><a data-toggle="tab" href="#tab-personel" class="nav-link">Personel</a></li> --}}
-                <li class="nav-item"><a data-toggle="tab" href="#tab-report" class="nav-link">Report</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-meetings" class="nav-link">Meetings</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-references-link" href="#tab-references" class="nav-link">References and Comments</a></li>
                 <li class="nav-item"><a data-toggle="tab" href="#tab-logs" class="nav-link">Logs</a></li>
             </ul>
         </div>
@@ -118,6 +118,24 @@
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-header-tab card-header">
                                     <div class="card-header-title">Project Personnel</div>
+                                    @can('manage-project', $project)
+                                    <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
+                                        <div class="btn-group dropdown">
+                                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn-icon btn-icon-only btn btn-link">
+                                                <i class="fa fa-plus fa-2x btn-icon-wrapper"></i>
+                                            </button>
+                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-212px, 36px, 0px);">
+                                                <h6 tabindex="-1" class="dropdown-header">Search Person</h6>
+                                                <form class="dropdown-header" action="">
+                                                    <div class="form-group">
+                                                    <label for=""></label>
+                                                    <input type="text" class="form-control" name="user_search" id="user_search" aria-describedby="helpId" placeholder="">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endcan
                                 </div>
                                 <div class="card-body">
                                     <div class="scroll-area-lg scrollhere">
@@ -158,7 +176,7 @@
                         <div class="col-sm-12 col-lg-12">
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-body">
-                                    <div class="scroll-area-xl">
+                                    <div class="scroll-area-xl" style="width: 100%;">
                                         <div class="scrollbar-container ps ps--active-y">
                                             <div id="container" width="100%" height="80%"></div>
                                         </div>
@@ -168,7 +186,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane show" id="tab-task" role="tabpanel">
+                <div class="tab-pane" id="tab-task" role="tabpanel">
                     <div class="row">
                         <div class="col-sm-12 col-lg-7">
                             <div class="card-hover-shadow-2x mb-3 card">
@@ -247,14 +265,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="col-md-12">
-                                                        <div class="position-relative form-group">
-                                                            <label for="task_desc" class="">Task Description</label>
-                                                            <textarea name="description" id="task_desc" value="  " class="form-control"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
                                                     <div class="col-md-6">
                                                         <div class="position-relative form-group">
                                                             <label for="start" class="">Project Start</label>
@@ -278,6 +288,14 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-row">
+                                                    <div class="col-md-12">
+                                                        <div class="position-relative form-group">
+                                                            <label for="task_desc" class="">Task Description</label>
+                                                            <textarea name="description" id="task_desc" value="  " class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="row justify-content-center">
                                                 </div>
                                             </div>
@@ -290,9 +308,70 @@
                 </div>
                 <div class="tab-pane" id="tab-files" role="tabpanel">
                 </div>
-                <div class="tab-pane" id="tab-report" role="tabpanel">
-                    <div class="col-sm-12 col-lg-7">
+                <div class="tab-pane" id="tab-meetings" role="tabpanel">
+                </div>
+                <div class="tab-pane" id="tab-references" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title">References</div>
+                                    <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                      
+                                        <button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".addReferenceProject">
+                                            Add New
+                                        </button>
+                                    </div>
+                                </div>
 
+                                <div class="card-body">
+                                    <div class="scroll-area-xl scrollhere">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush">
+                                                @foreach ($project->references()->get() as $reference)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-3">
+                                                                <img width="40" class="rounded-circle" src="{{$reference->user->avatar}}" alt="">
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">
+                                                                    {{$reference->user->name}}
+                                                                </div>
+                                                                <div class="widget-subheading">
+                                                                    {{$reference->name}} - {{$reference->created_at}}
+                                                                </div>
+                                                                <div class="widget-body">
+                                                                    <a href="//{{$reference->body}}">{{$reference->body}}</a>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                                <div class="card-hover-shadow-2x mb-3 card">
+                                    <div class="card-header-tab card-header">
+                                        <div class="card-header-title">Comments</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="scroll-area-lg scrollhere">
+                                            <div class="scrollbar-container ps ps--active-y">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <input name="body" id="body" placeholder="Comment" type="text" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="tab-logs" role="tabpanel">
@@ -376,9 +455,14 @@
             </div>
         </div>
     </div>
+
+
+
 @endsection
 
 @section('scripts')
+
+{{-- Tabs --}}
 <script type="text/javascript">
     $(function () {
         $('#start').datetimepicker({
@@ -410,9 +494,110 @@
             $('#tab-task-link').addClass('active');
             $('div#tab-task').addClass('show active');
         }
+        else if(window.location.hash == '#tab-references')
+        {
+            $("#tab-summary-link").removeClass('active');
+            $('div#tab-summary').removeClass('active');
+            $('#tab-references-link').addClass('active');
+            $('div#tab-references').addClass('show active');
+        }
     });
 
 </script>
+
+{{-- Queries --}}
+<script type="text/javascript">
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var projectid = {{$project->id}}
+    $(document).ready(function(){
+
+        $( "#user_search" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+            url:"{{route('users.getUsers')}}",
+            type: 'post',
+            dataType: "json",
+            data: {
+                _token: CSRF_TOKEN,
+                search: request.term,
+            },
+            success: function( data ) {
+                response( data );
+            }
+            });
+        },
+        select: function (event, ui) {
+            insert(ui.item.value);
+        }
+        });
+
+        function insert(value) {
+            $.ajax({
+                url:"{{ route('users.addUserProject')}}",
+                type: 'post',
+                data: {
+                    _token: CSRF_TOKEN,
+                    user: value,
+                    projectid: projectid
+                    },
+                success: function(response)
+                {
+                    if(response=="1")
+                    {
+                        Swal.fire({
+                            title: 'Already Assigned',
+                            icon: 'warning',
+                            }).then((result) => {
+                            if (result.value) {
+                                $('#user_search').val('');
+                            }
+                        })
+                    }
+                    else if(response=="2")
+                    {
+                        Swal.fire({
+                            title: 'User Added',
+                            icon: 'success',
+                            }).then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+                    }
+                }
+
+            });
+        }
+
+    });
+    function deleteUserTask(value) {
+            $.ajax({
+                url:"{{ route('users.deleteUserProject')}}",
+                type: 'post',
+                data: {
+                    _token: CSRF_TOKEN,
+                    user: value,
+                    projectid: projectid
+                    },
+                success: function(response)
+                {
+                    if(response=="1")
+                    {
+                        Swal.fire({
+                            title: 'User Removed',
+                            icon: 'success',
+                            }).then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            }
+                        })
+                    }
+                }
+
+            });
+        }
+</script>
+{{-- HighCharts --}}
 <script>
     var today = new Date(),
         day = 1000 * 60 * 60 * 24,
@@ -574,5 +759,54 @@
             }
         }
     });
-    </script>
+</script>
+@endsection
+
+@section('modals')
+
+<div class="modal fade addReferenceProject" tabindex="-1" role="dialog" aria-labelledby="addReferenceProject" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="{{ route('projects.addReferenceProject', $project)}}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Reference</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Reference Name</label>
+                                    <input name="name" id="name" placeholder="Reference Name" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="body" class="">Reference Link</label>
+                                    <input name="body" id="body" placeholder="Reference Link" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection

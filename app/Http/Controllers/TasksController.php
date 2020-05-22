@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Gate;
 use App\Task;
 use App\Project;
 use Spatie\Activitylog\Models\Activity;
@@ -23,7 +24,7 @@ class TasksController extends Controller
     {
         $user = Auth::user();
         $tasks = $user->tasks()->get();
-        $completedtask = $user->tasks()->where('status', '5')->paginate('2');
+        $completedtask = $user->tasks()->where('status', '5')->paginate('3');
         return view('task.index')->with(['tasks' => $tasks, 'completedtask' => $completedtask]);
     }
 
@@ -88,9 +89,11 @@ class TasksController extends Controller
      */
     public function show(Task $task)
     {
-        activity()->performedOn($task)
-        ->log('viewed');
-
+        
+        if(Gate::denies('view-task', $task->project)){
+            return redirect(route('task.index'))->with('error','You have no permission to view the task');
+        }
+        activity()->performedOn($task)->log('viewed');
         $logs = Activity::where('subject_type' , 'App\Task')->where('subject_id' , $task->id)->orderby('created_at', 'desc')->get();
         return view('task.show')->with([
                                 'task' => $task,
@@ -106,9 +109,11 @@ class TasksController extends Controller
      */
     public function edit(Task $task)
     {
+        $logs = Activity::where('subject_type' , 'App\Task')->where('subject_id' , $task->id)->orderby('created_at', 'desc')->get();
         return view('task.edit')->with([
-                                'task' => $task
-                                ]);
+            'task' => $task,
+            'logs' => $logs
+            ]);
     }
     /**
      * Update the specified resource in storage.
@@ -117,9 +122,55 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
-        //
+        if ($request->has('status')) {
+            $status = $request->status;
+            if($status == '3')
+            {
+                $task->status = $status;
+                $task->approved = \Carbon\Carbon::now();
+                $task->started = null;
+                $task->ended = null;
+            }
+            else if($status == '4')
+            {
+                $task->status = $status;
+                $task->started = \Carbon\Carbon::now();
+            }
+            else if($status == '5')
+            {
+                $task->status = $status;
+                $task->ended = \Carbon\Carbon::now();
+            }
+        }
+        if($request->has('name'))
+        {
+            $task->name = $request->input('name');
+        }   
+        if($request->has('description'))
+        {
+            $task->description = $request->input('description');
+        }   
+        if($request->has('start'))
+        {
+            $task->start = $request->input('start');
+        }   
+        if($request->has('end'))
+        {
+            $task->end = $request->input('end');
+        }   
+
+        if($task->save())
+        {
+            $request->session()->flash('success','Task Updated!');
+        }
+        else
+        {
+            $request->session()->flash('error','Error Updating');
+        }
+
+        return redirect()->route('task.show', $task);
     }
 
     /**

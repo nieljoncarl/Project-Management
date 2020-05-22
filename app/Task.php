@@ -13,8 +13,8 @@ class Task extends Model
     use LogsActivity;
 
     protected $fillable = ['name', 'description', 'start', 'end', 'status'];
-    
     protected static $logAttributes = ['name', 'description', 'start', 'end', 'status'];
+    protected static $logOnlyDirty = true;
 
     
     public function project(){

@@ -28,4 +28,14 @@ class Project extends Model
         return $this->belongsToMany('App\Task')->withTimestamps();
     }
 
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+    
+    public function references()
+    {
+        return $this->morphMany(Reference::class, 'commentable');
+    }
+
 }

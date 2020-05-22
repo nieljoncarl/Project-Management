@@ -16,7 +16,7 @@
 @section('content')   
     <div class="row">
         @foreach ($users as $user)
-        <div class="col-md-3 ">
+        <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">{{$user->name}}</h4>

@@ -4,10 +4,49 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                <i class="fa fa-tasks icon-gradient bg-plum-plate">
                 </i>
             </div>
             <div>{{$task->name}}</div>
+        </div>
+        <div class="page-title-actions">
+            @can('manage-tasks', $task)
+                <div class="form-group">    
+                    @if($task->status=="2")
+                    <form action="{{ route('task.update', $task)}}" class="d-inline-block" method="post">
+                        @csrf
+                        <input name="status" type="hidden" value="3">
+                        {{ method_field('PUT')}}
+                        <button type="submit" class="border-0 btn-transition btn btn-outline-primary" data-toggle="tooltip" data-original-title="Approve Task"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                    </form>
+                    @elseif($task->status=="3")
+                    <form action="{{ route('task.update', $task)}}" class="d-inline-block" method="post">
+                        @csrf
+                        <input name="status" type="hidden" value="4">
+                        {{ method_field('PUT')}}
+                        <button type="submit" class="border-0 btn-transition btn btn-outline-primary" data-toggle="tooltip" data-original-title="Start Task"><i class="fa fa-play-circle" aria-hidden="true"></i></button>
+                    </form> 
+                    @elseif($task->status=="4")
+                    <form action="{{ route('task.update', $task)}}" class="d-inline-block" method="post">
+                        @csrf
+                        <input name="status" type="hidden" value="5">
+                        {{ method_field('PUT')}}
+                        <button type="submit" class="border-0 btn-transition btn btn-outline-primary" data-toggle="tooltip" data-original-title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    </form>
+                    @endif
+                    <a href="{{ route('task.edit', $task)}}" class="d-inline-block">
+                        <button type="button" data-toggle="tooltip" title="" class="border-0 btn-transition btn btn-outline-primary" data-original-title="Edit Task">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </a>
+                </div>       
+            @elsecan('manage-task', $task)
+                <a href="{{ route('task.edit', $task)}}" class="d-inline-block">
+                    <button type="button" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark" data-original-title="Edit Task">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </a>
+            @endcan
         </div>
     </div>
 </div>      
@@ -89,6 +128,8 @@
                     <div class="main-card mb-3 card">
                         <div class="card-header-tab card-header">
                             <div class="card-header-title">Task Personnel</div>
+                            
+                            @can('manage-task', $task)
                             <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
                                 <div class="btn-group dropdown">
                                     <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn-icon btn-icon-only btn btn-link">
@@ -105,6 +146,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan
                         </div>
                         <div class="card-body">
                             <div class="scroll-area-sm">
@@ -122,11 +164,14 @@
                                                             {{$user->name}}
                                                         </div>
                                                     </div>
+                                                    
+                                                    @can('manage-task', $task)
                                                     <div class="widget-content-right widget-content-actions">
-                                                        <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-danger">
+                                                        <button class="border-0 btn-transition btn btn-outline-danger" onclick="deleteUserTask({{$user->id}})">
                                                             <i class="fa fa-trash-alt"></i>
-                                                        </button></a>
+                                                        </button>
                                                     </div>
+                                                    @endcan
                                                 </div>
                                             </div>
                                         </li>
@@ -158,7 +203,63 @@
                                                     </div>
                                                     <div class="widget-content-left">
                                                         <div class="widget-heading">
-                                                            {{$log->causer->name}} {{$log->description}} this task.
+                                                            {{$log->causer->name}} {{$log->description}} 
+                                                            @if ($log->description == 'updated')
+                                                                the
+                                                                @php
+                                                                    $count = 1
+                                                                @endphp
+                                                                @foreach ($log->properties['attributes'] as $key => $value)
+                                                                
+                                                                    @if ($key == 'status')
+                                                                        {{ $key }} to 
+                                                                        {{-- <div> --}}
+                                                                            {{-- New {{ $key }}:  --}}
+                                                                            @if($value=="1")
+                                                                                <div class="badge badge-default">Proposal</div>
+                                                                            @elseif($value=="2")
+                                                                                <div class="badge badge-info">Pending</div>    
+                                                                            @elseif($value=="3")
+                                                                                <div class="badge badge-warning">Approved</div>    
+                                                                            @elseif($value=="4")
+                                                                                <div class="badge badge-primary">In Progress</div>     
+                                                                            @elseif($value=="5")
+                                                                                <div class="badge badge-success">Completed</div>   
+                                                                            @endif
+                                                                        {{-- </div>
+                                                                        <div>Original {{ $key }}:  --}}
+                                                                            from 
+                                                                            @if($log->properties['old'][$key]=="1")
+                                                                                <div class="badge badge-default">Proposal</div>
+                                                                            @elseif($log->properties['old'][$key]=="2")
+                                                                                <div class="badge badge-info">Pending</div>    
+                                                                            @elseif($log->properties['old'][$key]=="3")
+                                                                                <div class="badge badge-warning">Approved</div>    
+                                                                            @elseif($log->properties['old'][$key]=="4")
+                                                                                <div class="badge badge-primary">In Progress</div>     
+                                                                            @elseif($log->properties['old'][$key]=="5")
+                                                                                <div class="badge badge-success">Completed</div>   
+                                                                            @endif  
+                                                                        {{-- </div> --}}
+                                                                        
+                                                                    @elseif ($key == 'description')
+                                                                    {{ $key }}.
+                                                                    @else
+                                                                        
+                                                                    {{ $key }} to {{ $value }} from {{ $log->properties['old'][$key]}}
+                                                                        {{-- <div>New {{ $key }}: {{ $value }}</div>
+                                                                        <div>Original {{ $key }}: {{ $log->properties['old'][$key] }}                                                                 --}}
+                                                                    @endif
+                                                                    @if(count($log->properties['attributes']) > $count)
+                                                                    ,
+                                                                    @endif
+                                                                    @php
+                                                                        $count++;
+                                                                    @endphp
+                                                                @endforeach
+                                                            @else
+                                                            this task.
+                                                            @endif
                                                         </div>
                                                         <div class="widget-subheading">
                                                             {{$log->created_at}}
@@ -184,17 +285,19 @@
     <script type="text/javascript">
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var taskid = {{ $task->id }};
+        var projectid = {{$task->project_id}}
         $(document).ready(function(){
 
             $( "#user_search" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
-                url:"{{route('users.getUsers')}}",
+                url:"{{route('users.getUserTask')}}",
                 type: 'post',
                 dataType: "json",
                 data: {
                     _token: CSRF_TOKEN,
-                    search: request.term
+                    search: request.term,
+                    projectid: projectid,
                 },
                 success: function( data ) {
                     response( data );
@@ -203,9 +306,6 @@
             },
             select: function (event, ui) {
                 insert(ui.item.value);
-
-
-
             }
             });
 
@@ -246,7 +346,33 @@
 
                 });
             }
-        });
 
+        });
+        function deleteUserTask(value) {
+                $.ajax({
+                    url:"{{ route('users.deleteUserTask')}}",
+                    type: 'post',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        user: value,
+                        taskid: taskid
+                        },
+                    success: function(response)
+                    {
+                        if(response=="1")
+                        {
+                            Swal.fire({
+                                title: 'User Removed',
+                                icon: 'success',
+                                }).then((result) => {
+                                if (result.value) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    }
+
+                });
+            }
     </script>
 @endsection

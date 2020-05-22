@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use App\User;
 use App\Task;
+use App\Project;
 
 class UsersController extends Controller
 {
@@ -105,10 +106,12 @@ class UsersController extends Controller
     public function getUserTask(Request $request)
     {
         $search = $request->search;
+        $projectid = $request->projectid;
+        $project = Project::find($projectid);
         if($search == ''){
-           $users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
+           $users = $project->users()->orderby('name','asc')->limit(5)->get();
         }else{
-           $users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(10)->get();
+            $users = $project->users()->orderby('name','asc')->where('name', 'like', '%' .$search . '%')->limit(10)->get();
         }
         $response = array();
         foreach($users as $user){
@@ -139,17 +142,49 @@ class UsersController extends Controller
 
     public function deleteUserTask(Request $request)
     {
-        $item = $request->item;
-        $purchaseid = $request->purchaseid;
+        $user = $request->user;
+        $taskid = $request->taskid;
+        $user = User::find($user);
+        $task = Task::find($taskid);
 
-        $purchase = Purchase::find($purchaseid);
-        if($purchase->items()->detach($item))
+        if($task->users()->where('user_id', $user->id)->exists())
         {
-            echo json_encode('deleted');
+            $task->users()->detach($user);
+            echo ('1');
+        }
+     }
+
+    //  Projects
+    public function addUserProject(Request $request)
+    {
+        $user = $request->user;
+        $projectid = $request->projectid;
+        $user = User::find($user);
+        $project = Project::find($projectid);
+
+        if($project->users()->where('user_id', $user->id)->exists())
+        {
+            echo ('1');
         }
         else
         {
-            echo json_encode('unable to delete');
+            $project->users()->attach($user);
+            echo ('2');
+        }
+     }
+
+
+    public function deleteUserProject(Request $request)
+    {
+        $user = $request->user;
+        $projectid = $request->projectid;
+        $user = User::find($user);
+        $project = Task::find($projectid);
+
+        if($project->users()->where('user_id', $user->id)->exists())
+        {
+            $project->users()->detach($user);
+            echo ('1');
         }
      }
 }

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Comment' => $baseDir . '/app/Comment.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Deliverable' => $baseDir . '/app/Deliverable.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
@@ -31,6 +32,7 @@ return array(
     'App\\Http\\Controllers\\LogsController' => $baseDir . '/app/Http/Controllers/LogsController.php',
     'App\\Http\\Controllers\\MeetingsController' => $baseDir . '/app/Http/Controllers/MeetingsController.php',
     'App\\Http\\Controllers\\ProjectsController' => $baseDir . '/app/Http/Controllers/ProjectsController.php',
+    'App\\Http\\Controllers\\ReferencesController' => $baseDir . '/app/Http/Controllers/ReferencesController.php',
     'App\\Http\\Controllers\\ReportsController' => $baseDir . '/app/Http/Controllers/ReportsController.php',
     'App\\Http\\Controllers\\TasksController' => $baseDir . '/app/Http/Controllers/TasksController.php',
     'App\\Http\\Controllers\\UsersController' => $baseDir . '/app/Http/Controllers/UsersController.php',
@@ -49,6 +51,7 @@ return array(
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
+    'App\\Reference' => $baseDir . '/app/Reference.php',
     'App\\Role' => $baseDir . '/app/Role.php',
     'App\\Status' => $baseDir . '/app/Status.php',
     'App\\Task' => $baseDir . '/app/Task.php',

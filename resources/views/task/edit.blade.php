@@ -15,24 +15,70 @@
 @section('content')
     <div class="row">
         <div class="col-md-6 mb-4">
-            <div class="main-card mb-3 card">
-                <div class="card-header-tab card-header">
-                    <div class="card-header-title">Task Description</div>
-                    <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                        <div>
-                            
+            <form action="{{ route('task.update', $task)}}" method="post" class="">
+                <div class="main-card mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title">Task Description</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="scrollbar-container ps ps--active-y">
+                            @csrf
+                            @method('PUT')
+                            {{-- <input name="project_id" type="hidden" value="{{$project->id}}"> --}}
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="position-relative form-group">
+                                        <label for="name" class="">Task Name</label>
+                                        <input name="name" id="name" placeholder="Task Name" value="{{$task->name}}" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="position-relative form-group">
+                                        <label for="start" class="">Project Start</label>
+                                        <div class="input-group date" id="start" data-target-input="nearest">
+                                            <input type="text" name="start" class="form-control datetimepicker-input" data-toggle="datetimepicker" value="{{$task->start}}" data-target="#start" readonly/>
+                                            <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="position-relative form-group">
+                                        <label for="end" class="">Project End</label>
+                                        <div class="input-group date" id="end" data-target-input="nearest">
+                                            <input type="text" name="end" class="form-control datetimepicker-input" data-toggle="datetimepicker" value="{{$task->end}}" data-target="#end" readonly/>
+                                            <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="position-relative form-group">
+                                        <label for="task_desc" class="">Task Description</label>
+                                        <textarea name="description" id="task_desc" class="form-control">
+                                            {!!$task->description!!}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                            </div>
                         </div>
                     </div>
+                    
+                    <div class="card-footer">
+                        <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
+                            <button class="btn btn-success">Save</button>
+                            
+                        </div>
+                    </div>  
                 </div>
-                <div class="card-body">
-                    <div class="scroll-area-xl">
-                        {!!$task->description!!}
-                    </div>
-                </div>
-                
-                <div class="card-header-tab card-header">
-                </div>  
-            </div>
+            </form>
         </div>
         <div class="col-md-6 mb-4">
             <div class="row">
@@ -137,10 +183,29 @@
 @section('scripts')
 
     <script type="text/javascript">
+        $(function () {
+        $('#start').datetimepicker({
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true,
+            pickSeconds: false
+        });
+        $('#end').datetimepicker({
+            useCurrent: false,
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true,
+            pickSeconds: false
+        });
+        $("#start").on("change.datetimepicker", function (e) {
+            $('#end').datetimepicker('minDate', e.date);
+        });
+        $("#end").on("change.datetimepicker", function (e) {
+            $('#start').datetimepicker('maxDate', e.date);
+        });
+    });
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var taskid = {{ $task->id }};
         $(document).ready(function(){
-
+            CKEDITOR.replace( 'task_desc' );
             $( "#user_search" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
@@ -167,7 +232,7 @@
 
             function insert(value) {
                 $.ajax({
-                    url:"{{ route('users.addUser')}}",
+                    url:"{{ route('users.addUserTask')}}",
                     type: 'post',
                     data: {
                         _token: CSRF_TOKEN,
