@@ -62,23 +62,7 @@
                     </div>
                     <div class="card-body">
                         <div class="scroll-area-sm">
-                            <ul class="rm-list-borders rm-list-borders-scroll list-group list-group-flush">
-                                @foreach ($user->projects()->get() as $project)
-                                <li class="list-group-item">
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-wrapper">
-                                            <div class="widget-content-left mr-3">
-                                                {{-- <img width="42" class="rounded-circle" src="assets/images/avatars/5.jpg" alt=""> --}}
-                                            </div>
-                                            <div class="widget-content-left">
-                                                <div class="widget-heading">{{$project->alias}}</div>
-                                                <div class="widget-subheading">{{$project->pivot->type}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                @endforeach
-                            </ul>
+
                         </div>
                     </div>
                 </div>
@@ -103,70 +87,35 @@
                                     </thead>
                                     <div class="table-responsive">
                                         <tbody>
+                                            @foreach ($user->tasks()->get() as $task)
+                                            
                                             <tr>
                                                 <td>
                                                     <div class="widget-content p-0">
                                                         <div class="widget-content-wrapper">
                                                             <div class="widget-content-left flex2">
-                                                                <div class="widget-heading">Task 1</div>
-                                                                <div class="widget-subheading opacity-7">Duration</div>
+                                                                <div class="widget-heading">{{$task->name}}</div>
+                                                                <div class="widget-subheading opacity-7">{{$task->start}} - {{$task->end}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="text-center">Madrid</td>
+                                                <td class="text-center">{{$task->project->name}}</td>
                                                 <td class="text-center">
-                                                    <div class="badge badge-warning">Pending</div>
+                                                    @if($task->status=="1")
+                                                        <div class="badge badge-default">Proposal</div>
+                                                    @elseif($task->status=="2")
+                                                        <div class="badge badge-info">Pending</div>    
+                                                    @elseif($task->status=="3")
+                                                        <div class="badge badge-warning">Approved</div>    
+                                                    @elseif($task->status=="4")
+                                                        <div class="badge badge-primary">In Progress</div>     
+                                                    @elseif($task->status=="5")
+                                                        <div class="badge badge-success">Completed</div>   
+                                                    @endif
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left flex2">
-                                                                <div class="widget-heading">Ruben Tillman</div>
-                                                                <div class="widget-subheading opacity-7">Etiam sit amet orci eget</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">Berlin</td>
-                                                <td class="text-center">
-                                                    <div class="badge badge-success">Completed</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left flex2">
-                                                                <div class="widget-heading">Elliot Huber</div>
-                                                                <div class="widget-subheading opacity-7">Lorem ipsum dolor sic</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">London</td>
-                                                <td class="text-center">
-                                                    <div class="badge badge-danger">In Progress</div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left flex2">
-                                                                <div class="widget-heading">Vinnie Wagstaff</div>
-                                                                <div class="widget-subheading opacity-7">UI Designer</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">Amsterdam</td>
-                                                <td class="text-center">
-                                                    <div class="badge badge-info">On Hold</div>
-                                                </td>
-                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </div>
                                 </table>

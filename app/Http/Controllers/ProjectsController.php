@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Gate;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use App\Project;
@@ -22,8 +23,6 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        //$projects = Project::all();
-
         $user = Auth::user();
         if($user->hasRole('Catalyst Officer'))
         {
@@ -91,6 +90,10 @@ class ProjectsController extends Controller
      */
     public function show(Project $project)
     {        
+        
+        if(Gate::denies('manage-project', $project)){
+            return redirect(route('project.index'))->with('error','You have no permission to view the project');
+        }
         activity()->performedOn($project)
                 ->log('viewed');
         
@@ -165,5 +168,50 @@ class ProjectsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addReferenceProject(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $project->references()->create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'body' => $request->input('body')
+        ]);
+        $request->session()->flash('success','Reference Added!');
+        return redirect()->route('project.show', $project->id."#tab-references");
+        
+    }
+
+    public function updateReferenceProject(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $project->references()->create([
+            'user_id' => Auth::id(),
+            'body' => $request->input('body')
+        ]);
+        return redirect()->route('project.show', $project);
+        
+    }
+    public function deleteReferenceProject(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $project->references()->create([
+            'user_id' => Auth::id(),
+            'body' => $request->input('body')
+        ]);
+        return redirect()->route('project.show', $project);
+        
+    }
+
+    public function addCommentProject(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $project->comments()->create([
+            'user_id' => Auth::id(),
+            'body' => $request->input('body')
+        ]);
+        return redirect()->route('project.show', $project);
+        
     }
 }

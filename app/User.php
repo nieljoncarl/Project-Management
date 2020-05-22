@@ -37,46 +37,61 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // ROLES
     public function roles(){
         return $this->belongsToMany('App\Role')->withTimestamps();
     }
 
-
-    public function hasAnyRoles($roles){
+    public function hasAnyRoles($roles)
+    {
 
         if($this->roles()->whereIn('name',$roles)->first()){
             return true;
         }
         return false;
-
     }
 
-    public function hasRole($role){
-
+    public function hasRole($role)
+    {
         if($this->roles()->where('name',$role)->first()){
             return true;
         }
         return false;
-
     }
-    
+
+    // PROJECTS
     public function projects(){
         return $this->belongsToMany('App\Project')->withTimestamps()->withPivot('type');
     }
 
+    public function hasProject($project)
+    {
+        return $this->projects()->where('project_id',$project->id)->first();
+    }
+
     public function hasAnyProject($project){
 
-        if($this->projects()->where('project_user.type',$project)->first()){
+        if($this->projects()->whereIn('project_id',$project->id)->first()){
             return true;
         }
         return false;
-
     }
 
-    
     public function tasks(){
         return $this->belongsToMany('App\Task')->withTimestamps();
     }
 
+    public function hasTask($task){
+        return $this->tasks()->where('task_id',$task->id)->first();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function references()
+    {
+        return $this->hasMany(Reference::class);
+    }
 
 }

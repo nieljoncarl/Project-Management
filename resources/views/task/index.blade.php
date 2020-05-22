@@ -9,12 +9,19 @@
             </div>
             <div>Tasks</div>
         </div>
+        <div class="page-title-actions">
+            <a href="{{ route('task.create')}}">
+                <button type="button" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark" data-original-title="Create Task">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </a>
+        </div>
     </div>
 </div>    
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-4 mb-4">
+        <div class="col-md-6 col-lg-4 mb-4">
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header-tab card-header">
                     <div class="card-header-title">Active Tasks</div>
@@ -29,20 +36,19 @@
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">
-                                                    {{$task->name}}
+                                                    <a href="{{route('task.show',$task)}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Project: {{$task->project->alias}}">{{$task->name}}</a>
                                                 </div>
                                                 <div class="widget-subheading">
-                                                    <div>Project: {{$task->project->alias}}</div>
                                                     <div>Duration: {{$task->start}} - {{$task->end}} </div>
                                                 </div>
                                             </div>
                                             <div class="widget-content-right widget-content-actions">
-                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                    <i class="fa fa-eye"></i>
-                                                </button></a>
-                                                <button class="border-0 btn-transition btn btn-outline-success">
-                                                    <i class="fa fa-check"></i>
-                                                </button>
+                                                <form action="{{ route('task.update', $task)}}" method="POST">
+                                                    @csrf
+                                                    @method('PUT') 
+                                                    <input name="status" type="hidden" value="5">
+                                                    <button type="submit" class="border-0 btn-transition btn btn-outline-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -54,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-6 col-lg-4 mb-4">
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header-tab card-header">
                     <div class="card-header-title">Approved Tasks</div>
@@ -69,20 +75,19 @@
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">
-                                                    {{$task->name}}
+                                                    <a href="{{route('task.show',$task)}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Project: {{$task->project->alias}}">{{$task->name}}</a>
                                                 </div>
                                                 <div class="widget-subheading">
-                                                    <div>Project: {{$task->project->alias}}</div>
                                                     <div>Duration: {{$task->start}} - {{$task->end}} </div>
                                                 </div>
                                             </div>
                                             <div class="widget-content-right widget-content-actions">
-                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                    <i class="fa fa-eye"></i>
-                                                </button></a>
-                                                <a href="http://"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                    <i class="fa fa-play-circle"></i>
-                                                </button></a>
+                                                <form action="{{ route('task.update', $task)}}" method="post">
+                                                    @csrf
+                                                    <input name="status" type="hidden" value="4">
+                                                    {{ method_field('PUT')}}
+                                                    <button type="submit" class="border-0 btn-transition btn btn-outline-primary"><i class="fa fa-play-circle" aria-hidden="true"></i></button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-6 col-lg-4 mb-4">
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header-tab card-header">
                     <div class="card-header-title">Pending Tasks</div>
@@ -109,16 +114,15 @@
                                         <div class="widget-content-wrapper">
                                             <div class="widget-content-left">
                                                 <div class="widget-heading">
-                                                    {{$task->name}}
+                                                    <a href="{{route('task.show',$task)}}" data-toggle="tooltip" data-placement="bottom" data-original-title="Project: {{$task->project->alias}}">{{$task->name}}</a>
                                                 </div>
                                                 <div class="widget-subheading">
-                                                    <div>Project: {{$task->project->alias}}</div>
                                                     <div>Duration: {{$task->start}} - {{$task->end}} </div>
                                                 </div>
                                             </div>
                                             <div class="widget-content-right widget-content-actions">
                                                 <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa fa-thumbs-up"></i>
                                                 </button></a>
                                             </div>
                                         </div>
@@ -131,15 +135,18 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6 col-lg-12 mb-4">
             <div class="main-card mb-3 card">
                 <div class="card-header-tab card-header">
                     <div class="card-header-title">Completed Tasks</div>
+                    <div class="btn-actions-pane-right">
+                        <div class="mx-auto">
+                            {{ $completedtask->links() }}   
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="scroll-area-xl">
+                    <div class="scroll-area-md">
                         <div class="table-responsive">
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                 <thead>
@@ -206,9 +213,6 @@
                             </table>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    {{ $completedtask->links() }}
                 </div>
             </div>
         </div>

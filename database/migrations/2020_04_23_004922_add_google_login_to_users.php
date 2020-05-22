@@ -15,7 +15,7 @@ class AddGoogleLoginToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable(true)->change();
-            $table->string('google_id');
+            $table->string('google_id')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
         });
@@ -29,7 +29,6 @@ class AddGoogleLoginToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('password')->nullable(false)->change();
             $table->dropColumn('google_id');
             $table->dropColumn('avatar');
             $table->dropColumn('avatar_original');

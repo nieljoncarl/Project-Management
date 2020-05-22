@@ -160,25 +160,24 @@
                                 <thead>
                                 <tr>
                                     <th>Project Name</th>
-                                    <th class="text-center">Project Leader</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($user->projects()->get() as $project)
                                         <tr>
                                             <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading"> {{$project->alias}} </div>
-                                                            <div class="widget-subheading opacity-7">{{$project->name}}</div>
+                                                <a href="{{route('project.show', $project)}}">
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left flex2">
+                                                                <div class="widget-heading"> {{$project->alias}} </div>
+                                                                <div class="widget-subheading opacity-7">{{$project->name}}</div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </a>
                                             </td>
-                                            <td class="text-center"> {{$project->user->name}} </td>
                                             <td class="text-center">
                                                 @if($project->status=="1")
                                                     <div class="badge badge-default">Proposal</div>
@@ -191,11 +190,6 @@
                                                 @elseif($project->status=="5")
                                                     <div class="badge badge-success">Completed</div>   
                                                 @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="{{route('project.show', $project)}}" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -218,10 +212,8 @@
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th class="text-center">Task</th>
+                                <th>Task Name</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Actions</th>
                             </tr>
                             </thead>
                             <div class="table-responsive">
@@ -229,16 +221,17 @@
                                     @foreach ($user->tasks()->where('status', '4')->get() as $task)
                                     <tr>
                                         <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading"> {{$task->name}} </div>
-                                                        <div class="widget-subheading opacity-7">{{$task->project->name}}</div>
+                                            <a href="{{route('task.show', $task)}}">
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading"> {{$task->name}} </div>
+                                                            <div class="widget-subheading opacity-7">{{$task->project->name}}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         </td>
-                                        <td class="text-center"> {{$task->user->name}} </td>
                                         <td class="text-center">
                                             @if($task->status=="1")
                                                 <div class="badge badge-default">Proposal</div>
@@ -251,11 +244,6 @@
                                             @elseif($task->status=="5")
                                                 <div class="badge badge-success">Completed</div>   
                                             @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{route('task.show', $task)}}" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

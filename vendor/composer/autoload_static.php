@@ -468,6 +468,7 @@ class ComposerStaticInit63a647d9c54585189728ad643a03ec67
     );
 
     public static $classMap = array (
+        'App\\Comment' => __DIR__ . '/../..' . '/app/Comment.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Deliverable' => __DIR__ . '/../..' . '/app/Deliverable.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
@@ -493,6 +494,7 @@ class ComposerStaticInit63a647d9c54585189728ad643a03ec67
         'App\\Http\\Controllers\\LogsController' => __DIR__ . '/../..' . '/app/Http/Controllers/LogsController.php',
         'App\\Http\\Controllers\\MeetingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/MeetingsController.php',
         'App\\Http\\Controllers\\ProjectsController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProjectsController.php',
+        'App\\Http\\Controllers\\ReferencesController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReferencesController.php',
         'App\\Http\\Controllers\\ReportsController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReportsController.php',
         'App\\Http\\Controllers\\TasksController' => __DIR__ . '/../..' . '/app/Http/Controllers/TasksController.php',
         'App\\Http\\Controllers\\UsersController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsersController.php',
@@ -511,6 +513,7 @@ class ComposerStaticInit63a647d9c54585189728ad643a03ec67
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Reference' => __DIR__ . '/../..' . '/app/Reference.php',
         'App\\Role' => __DIR__ . '/../..' . '/app/Role.php',
         'App\\Status' => __DIR__ . '/../..' . '/app/Status.php',
         'App\\Task' => __DIR__ . '/../..' . '/app/Task.php',

@@ -7,17 +7,16 @@
                 <i class="fa fa-book icon-gradient bg-plum-plate">
                 </i>
             </div>
-            <div>Create New Project</div>
+            <div>Create Task</div>
         </div>
         <div class="page-title-actions">
-            <a href="{{ route('project.index')}}">
+            <a href="{{ route('task.index')}}">
                 <button type="button" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-danger" data-original-title="Cancel">
                     <i class="fa fa-window-close"></i>
                 </button>
             </a>
         </div>
     </div>
-    
 </div>    
 @endsection
 @section('content')
