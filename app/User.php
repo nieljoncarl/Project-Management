@@ -77,6 +77,10 @@ class User extends Authenticatable
         return false;
     }
 
+    public function meetings(){
+        return $this->belongsToMany('App\Meeting')->withTimestamps()->withPivot('guest_status');
+    }
+
     public function tasks(){
         return $this->belongsToMany('App\Task')->withTimestamps();
     }

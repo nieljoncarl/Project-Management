@@ -15,9 +15,9 @@ class CreateMeetingUserTable extends Migration
     {
         Schema::create('meeting_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('project_id')->unsigned();
+            $table->bigInteger('meeting_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('status', 100)->nullable()->default('Invited');
+            $table->string('guest_status', 100)->nullable()->default('Invited');
             $table->timestamps();
         });
     }

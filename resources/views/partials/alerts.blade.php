@@ -35,30 +35,30 @@
         @foreach ($errors->all() as $error)
             errorlog += '{{$error}}<br>';
         @endforeach
-        swal({ 
-            html:true, 
-            title:'Errors', 
-            text:errorlog,
-            type:'error'
-        });
+            Swal.fire({
+                icon: 'error',
+                title: errorlog,
+                showConfirmButton: true
+            });
         
     @elseif (session('success'))
-            Swal.fire(
-            'Success',
-            '{{session('success')}}',
-            'success'
-            )
+            Swal.fire({
+                icon: 'success',
+                title: '{{session('success')}}',
+                showConfirmButton: false,
+                timer: 2000
+            });
     @elseif (session('error'))
-            Swal.fire(
-            'Error',
-            '{{session('error')}}',
-            'error'
-            )
+            Swal.fire({
+                icon: 'error',
+                title: '{{session('error')}}',
+                showConfirmButton: false,
+                timer: 2000
+            });
     @elseif (session('warning'))
-            Swal.fire(
-            'Warning',
-            '{{session('warning')}}',
-            'warning'
-            )
+            Swal.fire({
+                icon: 'warning',
+                title: '{{session('warning')}}',
+            });
     @endif
 </script>

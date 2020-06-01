@@ -75,8 +75,8 @@
                 <div class="form-row">
                     <div class="col-md-12">
                         <div class="position-relative form-group">
-                            <label for="project_name" class="">Project Outcomes</label>
-                            <textarea name="outcomes" id="outcomes" class="form-control" rows="5"></textarea>
+                            <label for="project_name" class="">Project Output</label>
+                            <textarea name="output" id="output" class="form-control" rows="5"></textarea>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
 @section('scripts')
 <script type="text/javascript">
 
-    CKEDITOR.replace( 'outcomes' );
+    CKEDITOR.replace( 'output' );
     CKEDITOR.replace( 'description' );
     $(function () {
         $('#start').datetimepicker({

@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <button class="btn btn-success">Generate</button>
+                            <button class="btn btn-success" disabled>Generate</button>
                         </div>
                     </form>
                 </div>
@@ -74,17 +74,8 @@
                     <div class="card-header-title">Generate All Task Report</div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('report.store')}}" method="post" class="">
+                    <form action="{{ route('report.tasks', Auth::user())}}" method="post" class="" target="_blank">
                         @csrf
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="position-relative form-group">
-                                    <label for="project_name" class="">Report Name</label>
-                                    <input name="name" id="project_name" placeholder="Report Name" type="text" class="form-control">
-                                </div>
-                            </div>
-                            
-                        </div>
                         <div class="form-row">
                             <div class="col-md-12">
                                 <div class="position-relative form-group">
@@ -165,7 +156,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <button class="btn btn-success">Generate</button>
+                            <button class="btn btn-success" disabled>Generate</button>
                         </div>
                     </form>
                 </div>

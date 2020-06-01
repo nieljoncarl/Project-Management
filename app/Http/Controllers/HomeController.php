@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -24,6 +25,13 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('home')->with('user', $user);
+        
+        $todaysmeetings = $user->meetings()->where(function($query) {
+            $query->whereDate('start', Carbon::today());	
+        })
+        ->orWhere(function($query) {
+            $query->where('recurring_day', Carbon::now()->englishDayOfWeek);	
+        })->get();
+        return view('home')->with('user', $user)->with('todaysmeetings', $todaysmeetings);
     }
 }

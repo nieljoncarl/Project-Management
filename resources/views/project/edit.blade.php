@@ -69,7 +69,7 @@
                             <label for="status" class="">Project Status</label>
                             <select class="custom-select" name="status" id="status">
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}"> {{ $status->name }} </option>
+                                    <option value="{{ $status->id }}"  {{ ( $status->id == $project->status) ? 'selected' : '' }}> {{ $status->name }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,8 +86,8 @@
                 <div class="form-row">
                     <div class="col-md-12">
                         <div class="position-relative form-group">
-                            <label for="project_name" class="">Project Outcomes</label>
-                            <textarea name="outcomes" id="description" value="  " class="form-control" rows="5">{{$project->outcomes}}</textarea>
+                            <label for="project_name" class="">Project Output</label>
+                            <textarea name="output" id="output" value="  " class="form-control" rows="5">{{$project->output}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -118,5 +118,7 @@
             $('#start').datetimepicker('maxDate', e.date);
         });
     });
+    CKEDITOR.replace( 'description' );
+    CKEDITOR.replace( 'output' );
 </script>
 @endsection

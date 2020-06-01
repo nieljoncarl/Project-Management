@@ -18,7 +18,7 @@
             <form action="{{ route('task.update', $task)}}" method="post" class="">
                 <div class="main-card mb-3 card">
                     <div class="card-header-tab card-header">
-                        <div class="card-header-title">Task Description</div>
+                        <div class="card-header-title">Task New Information</div>
                     </div>
                     <div class="card-body">
                         <div class="scrollbar-container ps ps--active-y">
@@ -66,6 +66,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="position-relative form-group">
+                                        <label for="task_deliverable" class="">Task Deliverable</label>
+                                        <textarea name="deliverable" id="task_deliverable" value="  " class="form-control">
+                                            {!!$task->deliverable!!}
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="position-relative form-group">
+                                        <label for="task_resources" class="">Task Resources</label>
+                                        <textarea name="resources" id="task_resources" value="  " class="form-control">
+                                            {!!$task->resources!!}
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row justify-content-center">
                             </div>
                         </div>
@@ -82,10 +102,10 @@
         </div>
         <div class="col-md-6 mb-4">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="main-card mb-3 card">
                         <div class="card-header-tab card-header">
-                            <div class="card-header-title">Task Information</div>
+                            <div class="card-header-title">Task Current Information</div>
                         </div>
                         <div class="card-body">
                             <div class="scroll-area-sm">
@@ -126,56 +146,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="main-card mb-3 card">
-                        <div class="card-header-tab card-header">
-                            <div class="card-header-title">Task Personel</div>
-                            <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
-                                <div class="btn-group dropdown">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn-icon btn-icon-only btn btn-link">
-                                        <i class="fa fa-plus fa-2x btn-icon-wrapper"></i>
-                                    </button>
-                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-212px, 36px, 0px);">
-                                        <h6 tabindex="-1" class="dropdown-header">Search Person</h6>
-                                        <form class="dropdown-header" action="">
-                                            <div class="form-group">
-                                            <label for=""></label>
-                                            <input type="text" class="form-control" name="" id="user_search" aria-describedby="helpId" placeholder="">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="scroll-area-sm">
-                                <ul class="todo-list-wrapper list-group list-group-flush">
-                                    @foreach ($task->users()->get() as $user)
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <img width="40" class="rounded-circle" src="{{$user->avatar}}" alt="">
-                                                </div>
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">
-                                                        {{$user->name}}
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-right widget-content-actions">
-                                                    <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-danger">
-                                                        <i class="fa fa-trash-alt"></i>
-                                                    </button></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -206,6 +176,8 @@
         var taskid = {{ $task->id }};
         $(document).ready(function(){
             CKEDITOR.replace( 'task_desc' );
+            CKEDITOR.replace( 'task_deliverable' );
+            CKEDITOR.replace( 'task_resources' );
             $( "#user_search" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({

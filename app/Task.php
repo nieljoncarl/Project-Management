@@ -12,8 +12,19 @@ class Task extends Model
     public $timestamps = true;
     use LogsActivity;
 
-    protected $fillable = ['name', 'description', 'start', 'end', 'status'];
-    protected static $logAttributes = ['name', 'description', 'start', 'end', 'status'];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'approved',
+        'started',
+        'ended',
+        'end',
+        'start'
+    ];
+
+    protected $fillable = ['name', 'description', 'deliverable', 'resources', 'start', 'end', 'status'];
+    protected static $logAttributes = ['name', 'description', 'deliverable', 'resources', 'start', 'end', 'status'];
     protected static $logOnlyDirty = true;
 
     

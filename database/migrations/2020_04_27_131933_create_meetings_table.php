@@ -19,11 +19,21 @@ class CreateMeetingsTable extends Migration
             $table->bigInteger('user_check_id')->unsigned()->nullable();
             $table->bigInteger('user_approve_id')->unsigned()->nullable();
             $table->bigInteger('user_deny_id')->unsigned()->nullable();
+            $table->bigInteger('project_id')->unsigned()->default(12);
             $table->string('name', 100)->default('Meeting Name');
             $table->string('type', 100)->nullable()->default('Meeting Type');
-            $table->string('location', 100)->nullable()->default('Meeting Location');
+            $table->string('link', 500)->nullable()->default('Meeting Link');
+            $table->string('location', 500)->nullable()->default('Meeting Location');
             $table->mediumText('agenda', 100)->nullable()->default('Meeting Agenda');
-            $table->timestamp('datetime');
+            $table->longText('minutes', 100)->nullable()->default('Meeting Minutes');
+            $table->integer('status')->default(0);
+            $table->string('recurring_day', 500)->default('Monday');
+            $table->string('recurring_time', 500)->default('00:00');
+            $table->timestamp('start')->nullable();
+            $table->timestamp('end')->nullable();
+            $table->timestamp('approved')->nullable();
+            $table->timestamp('started')->nullable();
+            $table->timestamp('ended')->nullable();
             $table->timestamps();
         });
     }

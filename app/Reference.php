@@ -11,7 +11,7 @@ class Reference extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id','name', 'body'];
+    protected $fillable = ['user_id','name', 'body', 'notes'];
 
     /**
      * Relationship: author

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Project;
 use App\Task;
 use App\Status;
+use App\User;
 
 class ReportsController extends Controller
 {
@@ -158,4 +159,23 @@ class ReportsController extends Controller
     {
         //
     }
+
+    public function tasks(Request $request, $id)
+    {
+        $user = User::find($id);
+        $request_start = $request->input('start2');
+        $request_end = $request->input('end2');
+        if($request_end=='')
+        {
+            $request_end = \Carbon\Carbon::now();
+        }
+        $tasks = $user->tasks()->where('started', '!=', '')->whereBetween('start', [$request_start, $request_end])->get();
+        return view('report.print')->with([
+            'user' => $user, 
+            'tasks' => $tasks, 
+            'request_start' => $request_start, 
+            'request_end' => $request_end
+            ]);
+    }
+
 }

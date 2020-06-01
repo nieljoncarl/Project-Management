@@ -8,6 +8,7 @@ use Spatie\Activitylog\Models\Activity;
 use App\User;
 use App\Task;
 use App\Project;
+use App\Meeting;
 
 class UsersController extends Controller
 {
@@ -18,7 +19,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        $users = User::all();
+        return view('user.index')->with('users', $users);
     }
 
     /**
@@ -94,6 +96,24 @@ class UsersController extends Controller
            $users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
         }else{
            $users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(10)->get();
+        }
+        $response = array();
+        foreach($users as $user){
+           $response[] = array("value"=>$user->id,"label"=>$user->name);
+        }
+        echo json_encode($response);
+        exit;
+    }
+
+    public function getUserProject(Request $request)
+    {
+        $search = $request->search;
+        $projectid = $request->projectid;
+        $project = Project::find($projectid);
+        if($search == ''){
+           $users = $project->users()->orderby('name','asc')->limit(5)->get();
+        }else{
+            $users = $project->users()->orderby('name','asc')->where('name', 'like', '%' .$search . '%')->limit(10)->get();
         }
         $response = array();
         foreach($users as $user){
@@ -179,12 +199,51 @@ class UsersController extends Controller
         $user = $request->user;
         $projectid = $request->projectid;
         $user = User::find($user);
-        $project = Task::find($projectid);
-
+        $project = Project::find($projectid);
+        
         if($project->users()->where('user_id', $user->id)->exists())
         {
             $project->users()->detach($user);
             echo ('1');
         }
+        else
+        {
+            echo ('2');
+        }
      }
+
+     //Meetings
+     
+    public function addUserMeeting(Request $request)
+    {
+        $user = $request->user;
+        $meetingid = $request->meetingid;
+        $user = User::find($user);
+        $meeting = Meeting::find($meetingid);
+
+        if($meeting->users()->where('user_id', $user->id)->exists())
+        {
+            echo ('1');
+        }
+        else
+        {
+            $meeting->users()->attach($user, ['guest_status' => 'Invited']);
+            echo ('2');
+        }
+     }
+
+     public function deleteUserMeeting(Request $request)
+     {
+         $user = $request->user;
+         $meetingid = $request->meetingid;
+         $user = User::find($user);
+         $meeting = Meeting::find($meetingid);
+ 
+         if($meeting->users()->where('user_id', $user->id)->exists())
+         {
+             $meeting->users()->detach($user);
+             echo ('1');
+         }
+      }
+
 }

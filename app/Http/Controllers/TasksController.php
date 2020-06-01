@@ -54,16 +54,26 @@ class TasksController extends Controller
         ]);
         $user = Auth::user()->id;
 
+    
+
         $task = new Task;
         $task->project_id = $request->input('project_id');
         $task->user_id = $user;
         $task->name = $request->input('name');
         $task->description = $request->input('description');
-        $task->status = "2";
+        $task->deliverable = $request->input('deliverable');
+        $task->resources = $request->input('resources');
         $task->start = $request->input('start');
         $task->end = $request->input('end');
 
-        
+        if(auth()->user()->hasRole('officer'))
+        {
+            $task->status = "3";
+        }
+        else
+        {
+            $task->status = "2";
+        }
         
         if($task->save())
         {
@@ -90,7 +100,7 @@ class TasksController extends Controller
     public function show(Task $task)
     {
         
-        if(Gate::denies('view-task', $task->project)){
+        if(Gate::denies('view-project', $task->project)){
             return redirect(route('task.index'))->with('error','You have no permission to view the task');
         }
         activity()->performedOn($task)->log('viewed');
@@ -109,6 +119,9 @@ class TasksController extends Controller
      */
     public function edit(Task $task)
     {
+        if(Gate::denies('manage-task', $task->project)){
+            return redirect(route('task.index'))->with('error','You have no permission to edit the task');
+        }
         $logs = Activity::where('subject_type' , 'App\Task')->where('subject_id' , $task->id)->orderby('created_at', 'desc')->get();
         return view('task.edit')->with([
             'task' => $task,
@@ -151,6 +164,14 @@ class TasksController extends Controller
         if($request->has('description'))
         {
             $task->description = $request->input('description');
+        }   
+        if($request->has('deliverable'))
+        {
+            $task->deliverable = $request->input('deliverable');
+        }   
+        if($request->has('resources'))
+        {
+            $task->resources = $request->input('resources');
         }   
         if($request->has('start'))
         {
