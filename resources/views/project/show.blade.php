@@ -10,57 +10,39 @@
             <div>{{ $project->name}}</div>
         </div>
         <div class="page-title-actions">
-            <a href="{{ route('project.edit', $project)}}">
-                <button type="button" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark" data-original-title="Edit Project">
-                    <i class="fa fa-edit"></i>
-                </button>
-            </a>
-            {{-- <div class="d-inline-block dropdown">
-                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+            <div class="d-inline-block dropdown">
+                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-primary">
                     <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-business-time fa-w-20"></i>
+                        <i class="fa fa-tools fa-w-20"></i>
                     </span>
-                    Buttons
+                    Actions
                 </button>
                 <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(111px, 33px, 0px);">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="nav-link-icon lnr-inbox"></i>
-                                <span>
-                                    Inbox
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-secondary">86</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="nav-link-icon lnr-book"></i>
-                                <span>
-                                    Book
-                                </span>
-                                <div class="ml-auto badge badge-pill badge-danger">5</div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="nav-link-icon lnr-picture"></i>
-                                <span>
-                                    Picture
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a disabled="" class="nav-link disabled">
-                                <i class="nav-link-icon lnr-file-empty"></i>
-                                <span>
-                                    File Disabled
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+                    @can('manage-projects')
+                        <a class="dropdown-item" href="{{ route('project.edit', $project)}}">
+                            Edit Project
+                        </a>
+                    @elsecan('manage-project', $project)
+                        <a class="dropdown-item" href="{{ route('project.edit', $project)}}">
+                            Edit Project
+                        </a>
+                    @endcan
+                    @can('manage-project', $project)
+                        <button type="button" tabindex="0" class="dropdown-item" data-toggle="modal" data-target=".addTaskProject">
+                            Add Task
+                        </button>     
+                        <button type="button" tabindex="0" class="dropdown-item" data-toggle="modal" data-target=".addReferenceProject">
+                            Add Reference
+                        </button>
+                        <button type="button" tabindex="0" class="dropdown-item" data-toggle="modal" data-target=".addMeetingProject">
+                            Add Meeting
+                        </button>
+                        <button type="button" tabindex="0" class="dropdown-item" data-toggle="modal" data-target=".addFileProject">
+                            Add File
+                        </button>
+                    @endcan
                 </div>
-            </div> --}}
+            </div>
         </div>
     </div>
     
@@ -71,10 +53,10 @@
         <div class="card-header">
             <ul class="nav nav-justified">
                 <li class="nav-item"><a data-toggle="tab" id="tab-summary-link" href="#tab-summary" class="nav-link show active">Summary</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-gantt" class="nav-link">Gantt</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-gantt-link" href="#tab-gantt" class="nav-link">Gantt</a></li>
                 <li class="nav-item"><a data-toggle="tab" id="tab-task-link" href="#tab-task" class="nav-link">Task</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-files" class="nav-link">Files</a></li>
-                <li class="nav-item"><a data-toggle="tab" href="#tab-meetings" class="nav-link">Meetings</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-files-link" href="#tab-files" class="nav-link">Files</a></li>
+                <li class="nav-item"><a data-toggle="tab" id="tab-meetings-link" href="#tab-meetings" class="nav-link">Meetings</a></li>
                 <li class="nav-item"><a data-toggle="tab" id="tab-references-link" href="#tab-references" class="nav-link">References and Comments</a></li>
                 <li class="nav-item"><a data-toggle="tab" href="#tab-logs" class="nav-link">Logs</a></li>
             </ul>
@@ -95,8 +77,8 @@
                                                 <h6><b>Project Description: </b></h6>
                                                 {!!$project->description!!}
                                                 <hr>
-                                                <h6><b>Project Outcomes:</b></h6>
-                                                {!!$project->outcomes!!}
+                                                <h6><b>Project Output:</b></h6>
+                                                {!!$project->output!!}
                                             </div>
                                             <div class="col-md-4">
                                                 
@@ -118,7 +100,7 @@
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-header-tab card-header">
                                     <div class="card-header-title">Project Personnel</div>
-                                    @can('manage-project', $project)
+                                    @can('manage-projects', $project)
                                     <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
                                         <div class="btn-group dropdown">
                                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn-icon btn-icon-only btn btn-link">
@@ -150,12 +132,29 @@
                                                             </div>
                                                             <div class="widget-content-left">
                                                                 <div class="widget-heading">
-                                                                    {{$user->name}}
+                                                                    <a href="{{route('user.show', $user)}}">{{$user->name}}</a>
                                                                 </div>
                                                                 <div class="widget-subheading">
                                                                     {{$user->pivot->type}}
                                                                 </div>
                                                             </div>
+
+                                                            @can('manage-projects')
+                                                                @if ($project->user_id == $user->id)
+                                                                        
+                                                                <div class="widget-content-right widget-content-actions">
+                                                                    <button class="border-0 btn-transition btn btn-outline-dark" disabled>
+                                                                        <i class="fa fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                                @else
+                                                                <div class="widget-content-right widget-content-actions">
+                                                                    <button class="border-0 btn-transition btn btn-outline-danger" onclick="deleteUserProject({{$user->id}})">
+                                                                        <i class="fa fa-trash-alt"></i>
+                                                                    </button>
+                                                                </div>
+                                                                @endif
+                                                            @endcan
                                                         </div>
                                                     </div>
                                                 </li>
@@ -188,49 +187,26 @@
                 </div>
                 <div class="tab-pane" id="tab-task" role="tabpanel">
                     <div class="row">
-                        <div class="col-sm-12 col-lg-7">
+                        <div class="col-sm-12 col-lg-6">
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-header-tab card-header">
-                                    <div class="card-header-title text-capitalize font-weight-bold"><i class="header-icon fa fa-tasks"> </i>TASKLIST</div>
+                                    <div class="card-header-title text-capitalize font-weight-bold"></i>Active Tasks</div>
                                 </div>
                                 <div class="card-body ">
-                                    <div class="scroll-area-lg">
+                                    <div class="scroll-area-md">
                                         <div class="scrollbar-container ps ps--active-y">
                                             <ul class="todo-list-wrapper list-group list-group-flush ">
-                                                @foreach ($tasks as $task)
+                                                @foreach ($tasks->where('status', '4') as $task)
                                                 <li class="list-group-item">
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left">
-                                                                <div class="widget-heading">{{$task->name}}
-                                                                    @if($task->status=="1")
-                                                                        <div class="badge badge-default">Proposal</div>
-                                                                    @elseif($task->status=="2")
-                                                                        <div class="badge badge-info">Pending</div>    
-                                                                    @elseif($task->status=="3")
-                                                                        <div class="badge badge-warning">Approved</div>    
-                                                                    @elseif($task->status=="4")
-                                                                        <div class="badge badge-primary">In Progress</div>     
-                                                                    @elseif($task->status=="5")
-                                                                        <div class="badge badge-success">Completed</div>   
-                                                                    @endif
-                                                                                            </div>
-                                                                <div class="widget-subheading">{{implode(', ',$task->users()->get()->pluck('name')->toArray())}} </div>
-                                                                <div class="widget-subheading"><i>{{$task->start}} - {{$task->end}}</i></div>
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('task.show',$task)}}">
+                                                                    <b>{{$task->name}}</b>
+                                                                </a>
                                                             </div>
-                                                            <div class="widget-content-right widget-content-actions">
-                                                                <a href="{{route('task.show',$task)}}"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </button></a>
-                                                                <a href="http://"><button class="border-0 btn-transition btn btn-outline-primary">
-                                                                    <i class="fa fa-play-circle"></i>
-                                                                </button></a>
-                                                                <button class="border-0 btn-transition btn btn-outline-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                                <button class="border-0 btn-transition btn btn-outline-danger">
-                                                                    <i class="fa fa-trash-alt"></i>
-                                                                </button>
+                                                            <div class="widget-subheading">
+                                                                {{ $task->start->format('H:i M d, Y') }} to {{$task->end->format('H:i M d, Y')}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -242,73 +218,259 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-lg-5">
-                            <form action="{{ route('task.store')}}" method="post" class="">
-                                <div class="card-hover-shadow-2x mb-3 card">
-                                    <div class="card-header-tab card-header">
-                                        <div class="card-header-title text-capitalize font-weight-normal"><i class="header-icon fa fa-edit "> </i>CREATE TASK</div>
-                                        <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                                            
-                                            <button class="btn btn-success">Submit</button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="scroll-area-lg">
-                                            <div class="scrollbar-container ps ps--active-y">
-                                                @csrf
-                                                <input name="project_id" type="hidden" value="{{$project->id}}">
-                                                <div class="form-row">
-                                                    <div class="col-md-12">
-                                                        <div class="position-relative form-group">
-                                                            <label for="name" class="">Task Name</label>
-                                                            <input name="name" id="name" placeholder="Task Name" type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-6">
-                                                        <div class="position-relative form-group">
-                                                            <label for="start" class="">Project Start</label>
-                                                            <div class="input-group date" id="start" data-target-input="nearest">
-                                                                <input type="text" name="start" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#start" readonly/>
-                                                                <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
-                                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="position-relative form-group">
-                                                            <label for="end" class="">Project End</label>
-                                                            <div class="input-group date" id="end" data-target-input="nearest">
-                                                                <input type="text" name="end" class="form-control datetimepicker-input" data-toggle="datetimepicker"  data-target="#end" readonly/>
-                                                                <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
-                                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-12">
-                                                        <div class="position-relative form-group">
-                                                            <label for="task_desc" class="">Task Description</label>
-                                                            <textarea name="description" id="task_desc" value="  " class="form-control"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">Approved Tasks</div>
                                 </div>
-                            </form>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($tasks->where('status', '3') as $task)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('task.show',$task)}}">
+                                                                    <b>{{$task->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                {{ $task->start->format('H:i M d, Y') }} to {{$task->end->format('H:i M d, Y')}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">Pending Tasks</div>
+                                    {{-- <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                                            
+                                        <button class="btn btn-primary"  data-toggle="modal" data-target=".addTaskProject">Add Task</button>
+                                    </div> --}}
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($tasks->where('status', '2') as $task)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('task.show',$task)}}">
+                                                                    <b>{{$task->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                {{ $task->start->format('H:i M d, Y') }} to {{$task->end->format('H:i M d, Y')}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">Completed Tasks</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($tasks->where('status', '5') as $task)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('task.show',$task)}}">
+                                                                    <b>{{$task->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                {{ $task->start->format('H:i M d, Y') }} to {{$task->end->format('H:i M d, Y')}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="tab-files" role="tabpanel">
                 </div>
                 <div class="tab-pane" id="tab-meetings" role="tabpanel">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold"></i>Today's Meeting</div>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($todaysmeetings as $meeting)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('meeting.show',$meeting)}}">
+                                                                    <b>{{$meeting->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                @if ($meeting->start != '')
+                                                                    {{ $meeting->start->format('H:i M d, Y') }} to {{$meeting->end->format('H:i M d, Y')}}
+                                                                @endif
+                                                                @if ($meeting->recurring_day != 'None')
+                                                                    Repeat Every: {{$meeting->recurring_time}} - {{$meeting->recurring_day}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">Upcoming Meeting</div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($upcomingmeetings as $meeting)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('meeting.show',$meeting)}}">
+                                                                    <b>{{$meeting->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                @if ($meeting->start != '')
+                                                                    {{ $meeting->start->format('H:i M d, Y') }} to {{$meeting->end->format('H:i M d, Y')}}
+                                                                @endif
+                                                                @if ($meeting->recurring_day != 'None')
+                                                                    Repeat Every: {{$meeting->recurring_time}} - {{$meeting->recurring_day}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">Past Meetings</div>
+                                    {{-- <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                                            
+                                        <button class="btn btn-primary"  data-toggle="modal" data-target=".addmeetingProject">Add meeting</button>
+                                    </div> --}}
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($meetings->where('status', '5') as $meeting)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('meeting.show',$meeting)}}">
+                                                                    <b>{{$meeting->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                @if ($meeting->start != '')
+                                                                    {{ $meeting->start->format('H:i M d, Y') }} to {{$meeting->end->format('H:i M d, Y')}}
+                                                                @endif
+                                                                @if ($meeting->recurring_day != 'None')
+                                                                    Repeat Every: {{$meeting->recurring_time}} - {{$meeting->recurring_day}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold">For Approval Meetings</div>
+                                    {{-- <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                                            
+                                        <button class="btn btn-primary"  data-toggle="modal" data-target=".addmeetingProject">Add meeting</button>
+                                    </div> --}}
+                                </div>
+                                <div class="card-body">
+                                    <div class="scroll-area-md">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($meetings->where('status', '2')->where('user_id', Auth::user()->id) as $meeting)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('meeting.show',$meeting)}}">
+                                                                    <b>{{$meeting->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                @if ($meeting->start != '')
+                                                                    {{ $meeting->start->format('H:i M d, Y') }} to {{$meeting->end->format('H:i M d, Y')}}
+                                                                @endif
+                                                                @if ($meeting->recurring_day != 'None')
+                                                                    Repeat Every: {{$meeting->recurring_time}} - {{$meeting->recurring_day}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane" id="tab-references" role="tabpanel">
                     <div class="row">
@@ -316,11 +478,11 @@
                             <div class="card-hover-shadow-2x mb-3 card">
                                 <div class="card-header-tab card-header">
                                     <div class="card-header-title">References</div>
-                                    <div class="btn-actions-pane-right text-capitalize actions-icon-btn">                      
-                                        <button type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".addReferenceProject">
+                                    {{-- <div class="btn-actions-pane-right text-capitalize actions-icon-btn">              
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".addReferenceProject">
                                             Add New
                                         </button>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="card-body">
@@ -451,13 +613,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
-
-
 @endsection
 
 @section('scripts')
@@ -482,24 +640,46 @@
         $("#end").on("change.datetimepicker", function (e) {
             $('#start').datetimepicker('maxDate', e.date);
         });
+
+        
+        $('#meeting_start').datetimepicker({
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true,
+            pickSeconds: false
+        });
+        $('#meeting_end').datetimepicker({
+            useCurrent: false,
+            format:'YYYY-MM-DD HH:mm:ss',
+            ignoreReadonly: true,
+            pickSeconds: false
+        });
+        $("#meeting_start").on("change.datetimepicker", function (e) {
+            $('#meeting_end').datetimepicker('minDate', e.date);
+        });
+        $("#meeting_end").on("change.datetimepicker", function (e) {
+            $('#meeting_start').datetimepicker('maxDate', e.date);
+        });
+        
+        $('#recurring_time').datetimepicker({
+            format:'HH:mm',
+            ignoreReadonly: true,
+            pickSeconds: false
+        });
     });
 
     CKEDITOR.replace( 'task_desc' );
+    CKEDITOR.replace( 'task_deliverable' );
+    CKEDITOR.replace( 'task_resources' );
+
+    CKEDITOR.replace( 'meeting_agenda' );
     $(document).ready(function () 
     {
         
-        if (window.location.hash == '#tab-task') {
+        if (window.location.hash != '') {
             $("#tab-summary-link").removeClass('active');
             $('div#tab-summary').removeClass('active');
-            $('#tab-task-link').addClass('active');
-            $('div#tab-task').addClass('show active');
-        }
-        else if(window.location.hash == '#tab-references')
-        {
-            $("#tab-summary-link").removeClass('active');
-            $('div#tab-summary').removeClass('active');
-            $('#tab-references-link').addClass('active');
-            $('div#tab-references').addClass('show active');
+            $(window.location.hash+'-link').addClass('active');
+            $('div'+window.location.hash).addClass('show active');
         }
     });
 
@@ -570,7 +750,7 @@
         }
 
     });
-    function deleteUserTask(value) {
+    function deleteUserProject(value) {
             $.ajax({
                 url:"{{ route('users.deleteUserProject')}}",
                 type: 'post',
@@ -591,6 +771,10 @@
                                 location.reload();
                             }
                         })
+                    }
+                    else
+                    {
+                        alert(response)
                     }
                 }
 
@@ -798,6 +982,211 @@
                             </div>
                         </div>
                     </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="notes" class="">Reference Notes</label>
+                                    <textarea name="notes" id="notes" placeholder="Reference Notes" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade addMeetingProject" tabindex="-1" role="dialog" aria-labelledby="addMeetingProject" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="{{ route('meeting.store')}}" method="post" class="">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Meeting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="scrollbar-container ps ps--active-y">
+                    @csrf
+                    <input name="project_id" type="hidden" value="{{$project->id}}">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="name" class="">Meeting Name</label>
+                                <input name="name" id="name" placeholder="Meeting Name" type="text" value="{{old('name')}}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="link" class="">Meeting Link</label>
+                                <input name="link" id="link" placeholder="Meeting Link" type="text" value="{{old('link')}}"  class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="location" class="">Meeting Location</label>
+                                <input name="location" id="location" placeholder="Meeting Location" type="text" value="{{old('location')}}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="start" class="">Meeting Start Date</label>
+                                <div class="input-group date" id="meeting_start" data-target-input="nearest">
+                                    <input type="text" name="meeting_start" class="form-control datetimepicker-input" value="{{old('meeting_start')}}" data-toggle="datetimepicker"  data-target="#meeting_start" readonly/>
+                                    <div class="input-group-append" data-target="#meeting_start" data-toggle="datetimepicker" >
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="end" class="">Meeting End Date</label>
+                                <div class="input-group date" id="meeting_end" data-target-input="nearest">
+                                    <input type="text" name="meeting_end" class="form-control datetimepicker-input" value="{{old('meeting_end')}}" data-toggle="datetimepicker"  data-target="#meeting_end" readonly/>
+                                    <div class="input-group-append" data-target="#meeting_end" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="recurring_day" class="">Recurring Day</label>
+                                <select class="custom-select" name="recurring_day" id="recurring_day">
+                                    <option value="None">None</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="end" class="">Recurring Time</label>
+                                <div class="input-group date" id="recurring_time" data-target-input="nearest">
+                                    <input type="text" name="recurring_time" class="form-control datetimepicker-input" value="{{old('recurring_time')}}" data-toggle="datetimepicker"  data-target="#recurring_time" readonly/>
+                                    <div class="input-group-append" data-target="#recurring_time" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="agenda" class="">Meeting Agenda</label>
+                                <textarea name="agenda" id="meeting_agenda" class="form-control">{{old('agenda')}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade addTaskProject" tabindex="-1" role="dialog" aria-labelledby="addTaskProject" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="{{ route('task.store')}}" method="post" class="">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="scrollbar-container ps ps--active-y">
+                    @csrf
+                    <input name="project_id" type="hidden" value="{{$project->id}}">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="name" class="">Task Name</label>
+                                <input name="name" id="name" placeholder="Task Name" type="text" value="{{old('name')}}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="start" class="">Task Start</label>
+                                <div class="input-group date" id="start" data-target-input="nearest">
+                                    <input type="text" name="start" class="form-control datetimepicker-input" value="{{old('start')}}" data-toggle="datetimepicker"  data-target="#start" readonly/>
+                                    <div class="input-group-append" data-target="#start" data-toggle="datetimepicker" >
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="end" class="">Task End</label>
+                                <div class="input-group date" id="end" data-target-input="nearest">
+                                    <input type="text" name="end" class="form-control datetimepicker-input" value="{{old('end')}}" data-toggle="datetimepicker"  data-target="#end" readonly/>
+                                    <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="task_desc" class="">Task Description</label>
+                                <textarea name="description" id="task_desc" class="form-control">{{old('description')}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="task_deliverable" class="">Task Deliverable</label>
+                                <textarea name="deliverable" id="task_deliverable" class="form-control">{{old('deliverable')}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="task_resources" class="">Task Resources</label>
+                                <textarea name="resources" id="task_resources" class="form-control">{{old('resources')}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

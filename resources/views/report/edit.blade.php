@@ -69,7 +69,7 @@
                             <label for="status" class="">Project Status</label>
                             <select class="custom-select" name="status" id="status">
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status->id }}"> {{ $status->name }} </option>
+                                    <option value="{{ $status->id }} "> {{ $status->name }} </option>
                                 @endforeach
                             </select>
                         </div>

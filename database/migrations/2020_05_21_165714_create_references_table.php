@@ -21,6 +21,7 @@ class CreateReferencesTable extends Migration
             $table->integer('commentable_id')->unsigned();
             $table->string('name');
             $table->text('body')->default('Reference Name');
+            $table->text('notes')->nullable()->default('Reference Notes');
             $table->timestamps();
         });
     }

@@ -12,6 +12,14 @@ class Project extends Model
     public $timestamps = true;
     use LogsActivity;
 
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'end',
+        'start'
+    ];
+
     protected $fillable = ['name', 'description', 'outcomes', 'start', 'end', 'status'];
     
     protected static $logAttributes = ['name', 'description', 'outcomes', 'start', 'end', 'status'];

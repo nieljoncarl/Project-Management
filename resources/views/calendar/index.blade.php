@@ -4,7 +4,7 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                <i class="fa fa-calendar icon-gradient bg-plum-plate">
                 </i>
             </div>
             <div>Calendar</div>
@@ -15,13 +15,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div id="calendar" class="fc fc-bootstrap4 fc-ltr">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Notice</div>
+                <div class="card-body">
+                    This module is under construction
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 @endsection

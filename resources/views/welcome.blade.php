@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Arial:200,600" rel="stylesheet">
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <!-- Styles -->
         <style>
             html, body {
@@ -64,6 +65,7 @@
         </style>
     </head>
     <body>
+        @include('partials.alerts')
         <div class="flex-center position-ref full-height">
             {{-- @if (Route::has('login'))
                 <div class="top-right links">
@@ -81,7 +83,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Technocore
+                    TECHNOCORE
                 </div>
 
                 <div class="links">

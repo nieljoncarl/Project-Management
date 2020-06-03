@@ -9,13 +9,13 @@
             </div>
             <div>Tasks</div>
         </div>
-        <div class="page-title-actions">
+        {{-- <div class="page-title-actions">
             <a href="{{ route('task.create')}}">
                 <button type="button" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark" data-original-title="Create Task">
                     <i class="fa fa-plus"></i>
                 </button>
             </a>
-        </div>
+        </div> --}}
     </div>
 </div>    
 @endsection
@@ -154,7 +154,8 @@
                                         <th>Task Name</th>
                                         <th>Project</th>
                                         <th class="text-center">Task Personnel</th>
-                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Deliverables</th>
+                                        {{-- <th class="text-center">Status</th> --}}
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -186,7 +187,7 @@
                                         <td class="text-center">
                                             {{implode(', ', $task->users()->get()->pluck('name')->toArray())}}
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             @if($task->status=="1")
                                                 <div class="badge badge-default">Proposal</div>
                                             @elseif($task->status=="2")
@@ -198,6 +199,10 @@
                                             @elseif($task->status=="5")
                                                 <div class="badge badge-success">Completed</div>   
                                             @endif
+                                        </td> --}}
+                                        
+                                        <td class="text-center">
+                                            {!!$task->deliverable!!}
                                         </td>
                                         <td class="text-center">
                                             <a href="{{route('task.edit', $task)}}" class="btn btn-primary btn-sm">

@@ -157,14 +157,14 @@
                     <div class="scrollbar-container ps ps--active-y">
                         <div class="table-responsive">
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                                <thead>
+                                {{-- <thead>
                                 <tr>
                                     <th>Project Name</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Status</th> 
                                 </tr>
-                                </thead>
+                                </thead> --}}
                                 <tbody>
-                                    @foreach ($user->projects()->get() as $project)
+                                    @foreach ($user->projects()->where('status', '4')->get() as $project)
                                         <tr>
                                             <td>
                                                 <a href="{{route('project.show', $project)}}">
@@ -178,7 +178,7 @@
                                                     </div>
                                                 </a>
                                             </td>
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 @if($project->status=="1")
                                                     <div class="badge badge-default">Proposal</div>
                                                 @elseif($project->status=="2")
@@ -190,7 +190,7 @@
                                                 @elseif($project->status=="5")
                                                     <div class="badge badge-success">Completed</div>   
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -210,12 +210,12 @@
                 <div class="scroll-area-md">
                     <div class="scrollbar-container ps ps--active-y">
                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
-                            <thead>
+                            {{-- <thead>
                             <tr>
                                 <th>Task Name</th>
                                 <th class="text-center">Status</th>
                             </tr>
-                            </thead>
+                            </thead> --}}
                             <div class="table-responsive">
                                 <tbody>
                                     @foreach ($user->tasks()->where('status', '4')->get() as $task)
@@ -232,7 +232,7 @@
                                                 </div>
                                             </a>
                                         </td>
-                                        <td class="text-center">
+                                        {{-- <td class="text-center">
                                             @if($task->status=="1")
                                                 <div class="badge badge-default">Proposal</div>
                                             @elseif($task->status=="2")
@@ -244,7 +244,7 @@
                                             @elseif($task->status=="5")
                                                 <div class="badge badge-success">Completed</div>   
                                             @endif
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     @endforeach
                                     
@@ -264,8 +264,53 @@
                 Today's Meetings
             </div>
             
-            <div class="scroll-area-md">
-                <div class="table-responsive">
+            <div class="card-body">
+                <div class="scroll-area-md">
+                    <div class="scrollbar-container ps ps--active-y">
+                        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                            <div class="table-responsive">
+                                <tbody>
+                                    @foreach ($todaysmeetings as $meeting)
+                                    <tr>
+                                        <td>
+                                            <a href="{{route('meeting.show', $meeting)}}">
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading"> {{$meeting->name}} </div>
+                                                            <div class="widget-subheading opacity-7">
+                                                                @if ($meeting->start != '')
+                                                                    {{ $meeting->start->format('H:i M d, Y') }} to {{$meeting->end->format('H:i M d, Y')}}
+                                                                @endif
+                                                                @if ($meeting->recurring_day != 'None')
+                                                                    Repeat Every: {{$meeting->recurring_time}} - {{$meeting->recurring_day}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        {{-- <td class="text-center">
+                                            @if($task->status=="1")
+                                                <div class="badge badge-default">Proposal</div>
+                                            @elseif($task->status=="2")
+                                                <div class="badge badge-info">Pending</div>    
+                                            @elseif($task->status=="3")
+                                                <div class="badge badge-warning">Approved</div>    
+                                            @elseif($task->status=="4")
+                                                <div class="badge badge-primary">In Progress</div>     
+                                            @elseif($task->status=="5")
+                                                <div class="badge badge-success">Completed</div>   
+                                            @endif
+                                        </td> --}}
+                                    </tr>
+                                    @endforeach
+                                    
+                                </tbody>
+                            </div>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -276,9 +321,10 @@
             <div class="card-header">
                 Recent Files
             </div>
-            
-            <div class="scroll-area-md">
-                <div class="table-responsive">
+            <div class="card-body">
+                <div class="scroll-area-md">
+                    <div class="table-responsive">
+                    </div>
                 </div>
             </div>
         </div>

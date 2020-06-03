@@ -52,16 +52,20 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAnyRoles(['Catalyst Officer']);
         });
         
-        Gate::define('view-task',function($user, $project){
-            return $user->hasProject($project);
-        });
-
+        // TASKS
+        
         Gate::define('manage-task',function($user, $task){
             return $user->hasTask($task);
         });
 
         Gate::define('manage-tasks',function($user){
-            return $user->hasAnyRoles(['admin','Catalyst Officer']);
+            return $user->hasAnyRoles(['admin','Catalyst Officer','officer']);
+        });
+
+        // PROJECTS
+
+        Gate::define('manage-projects',function($user){
+            return $user->hasAnyRoles(['admin','Catalyst Officer','officer']);
         });
 
         Gate::define('manage-project',function($user, $project){
@@ -71,5 +75,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view-project',function($user, $project){
             return $user->hasProject($project);
         });
+
     }
 }

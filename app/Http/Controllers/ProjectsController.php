@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Gate;
+use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use App\Project;
 use App\Task;
+use App\Meeting;
 use App\Status;
 
 class ProjectsController extends Controller
@@ -24,7 +26,7 @@ class ProjectsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if($user->hasRole('Catalyst Officer'))
+        if($user->hasRole('officer'))
         {
             $projects = Project::all();
         }
@@ -57,7 +59,7 @@ class ProjectsController extends Controller
             'name' => 'required',
             'alias' => 'required',
             'description' => 'required',
-            'outcomes' => 'required',
+            'output' => 'required',
             'start' => 'required',
             'end' => 'required',
         ]);
@@ -67,11 +69,18 @@ class ProjectsController extends Controller
         $project->name = $request->input('name');
         $project->alias = $request->input('alias');
         $project->description = $request->input('description');
-        $project->outcomes = $request->input('outcomes');
-        $project->status = "2";
+        $project->output = $request->input('output');
         $project->start = $request->input('start');
         $project->end = $request->input('end');
         
+        if(auth()->user()->hasRole('officer'))
+        {
+            $project->status = "3";
+        }
+        else
+        {
+            $project->status = "2";
+        }
         if($project->save())
         {
             $request->session()->flash('success','Project Added!');
@@ -99,11 +108,27 @@ class ProjectsController extends Controller
         
         $logs = Activity::where('subject_type' , 'App\Project')->where('subject_id' , $project->id)->orderby('created_at', 'desc')->get();
         $tasks = Task::where('project_id', $project->id)->get();
+        $meetings = Meeting::where('project_id', $project->id)->get();
+        $todaysmeetings = Meeting::where(function($query) use ($project) {
+                                $query->whereDate('start', Carbon::today())->where('project_id', $project->id);	
+                            })
+                            ->orWhere(function($query) use ($project) {
+                                $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->where('project_id', $project->id);	
+                            })->get();
+        $upcomingmeetings = Meeting::where(function($query) use ($project) {
+                                $query->whereDate('start', "!=" ,Carbon::today())->where('status','3')->where('project_id', $project->id);	
+                            })
+                            ->orWhere(function($query) use ($project) {
+                                $query->where('recurring_day', "!=" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None")->where('project_id', $project->id);	
+                            })->get();
         $statuses = Status::all();
         return view('project.show')->with([
             'project' => $project, 
             'logs' => $logs,
             'tasks' => $tasks,
+            'meetings' => $meetings,
+            'todaysmeetings' => $todaysmeetings,
+            'upcomingmeetings' => $upcomingmeetings,
             'statuses' => $statuses
             ]);
     }
@@ -135,7 +160,7 @@ class ProjectsController extends Controller
             'name' => 'required',
             'alias' => 'required',
             'description' => 'required',
-            'outcomes' => 'required',
+            'output' => 'required',
             'start' => 'required',
             'end' => 'required',
         ]);
@@ -144,7 +169,7 @@ class ProjectsController extends Controller
         $project->name = $request->input('name');
         $project->alias = $request->input('alias');
         $project->description = $request->input('description');
-        $project->outcomes = $request->input('outcomes');
+        $project->output = $request->input('output');
         $project->status = $request->input('status');
         $project->start = $request->input('start');
         $project->end = $request->input('end');

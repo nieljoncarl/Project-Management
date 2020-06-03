@@ -80,7 +80,7 @@ class LoginController extends Controller
         }
         // only allow people with @company.com to login
         // if(explode("@", $user->email)[1] !== 'tip.edu.ph'){
-        //     return redirect()->to('/');
+        //     return redirect()->to('/')->with('warning','Login with TIP email account only.');
         // }
         // check if they're an existing user
         $existingUser = User::where('email', $user->email)->first();

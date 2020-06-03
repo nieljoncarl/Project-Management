@@ -1,10 +1,10 @@
 <?php
-
+Route::permanentRedirect('/report', '/home');
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 Route::get('/redirect', 'Auth\LoginController@redirectToProvider')->name('google');
 Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
 
@@ -31,19 +31,28 @@ Route::resource('/funding', 'FundingAgenciesController');
 Route::resource('/log', 'LogsController');
 Route::resource('/report', 'ReportsController');
 
-
+//Project
 
 Route::post('/getUsers','UsersController@getUsers')->name('users.getUsers');
+Route::post('/getUserProject','UsersController@getUserProject')->name('users.getUserProject');
 Route::post('/addUserProject','UsersController@addUserProject')->name('users.addUserProject');
 Route::post('/deleteUserProject','UsersController@deleteUserProject')->name('users.deleteUserProject');
 Route::put('/addReferenceProject/{id}','ProjectsController@addReferenceProject')->name('projects.addReferenceProject');
 Route::put('/addCommentProject/{id}','ProjectsController@addCommentProject')->name('projects.addCommentProject');
 
+// TASK
 
 Route::post('/getUserTask','UsersController@getUserTask')->name('users.getUserTask');
 Route::post('/addUserTask','UsersController@addUserTask')->name('users.addUserTask');
 Route::post('/deleteUserTask','UsersController@deleteUserTask')->name('users.deleteUserTask');
 
-
 Route::post('/updateTaskStatus/{id}','TasksController@updateTaskStatus')->name('task.updateTaskStatus');
 
+//Reports
+Route::post('/report/task/{id}','ReportsController@tasks')->name('report.tasks');
+Route::post('/report/project/{id}','ReportsController@projects')->name('report.projects');
+
+//Meeting
+
+Route::post('/addUserMeeting','UsersController@addUserMeeting')->name('users.addUserMeeting');
+Route::post('/deleteUserMeeting','UsersController@deleteUserMeeting')->name('users.deleteUserMeeting');

@@ -20,7 +20,7 @@ class CreateTasksTable extends Migration
             $table->bigInteger('user_approve_id')->unsigned()->nullable();
             $table->bigInteger('user_deny_id')->unsigned()->nullable();
             $table->bigInteger('project_id')->unsigned()->default(12);
-            $table->bigInteger('parent')->default(12);
+            $table->bigInteger('parent')->default(0);
             $table->string('name', 100)->nullable()->default('Task Name');
             $table->longText('description')->nullable()->default('Task Description');       
             $table->longText('deliverable')->nullable()->default('Task Deliverable');      
