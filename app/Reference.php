@@ -11,7 +11,7 @@ class Reference extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id','name', 'body', 'notes'];
+    protected $fillable = ['user_id','name', 'link', 'notes'];
 
     /**
      * Relationship: author
@@ -28,7 +28,7 @@ class Reference extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function commentable()
+    public function referenceable()
     {
         return $this->morphTo();
     }

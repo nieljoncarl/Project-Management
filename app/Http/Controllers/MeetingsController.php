@@ -30,23 +30,31 @@ class MeetingsController extends Controller
         //$todaysmeetings = $user->meetings()->where('start', '>', \Carbon\Carbon::now()->subDays(1)->toDateString())->where('start', '<', \Carbon\Carbon::now()->addDays(1)->toDateString())->where('status','4')->orWhere('recurring_day', \Carbon\Carbon::now()->englishDayOfWeek)->get();
         
         $todaysmeetings = $user->meetings()->where(function($query) {
-            $query->whereDate('start', Carbon::today());	
-        })
-        ->orWhere(function($query) {
-            $query->where('recurring_day', Carbon::now()->englishDayOfWeek);	
+            $query->whereDate('start', Carbon::today())->whereBetween('status', ['3','4']);	
+        })->get();
+        $recurringmeetings = $user->meetings()->where(function($query) {
+            $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->whereBetween('status', ['3','4']);	
         })->get();
         $upcomingmeetings = $user->meetings()->where('status', '3')->where(function($query) {
-                                $query->whereDate('start', "!=" ,Carbon::today());	
+                                $query->whereDate('start', ">" ,Carbon::today());	
                             })
                             ->orWhere(function($query) {
-                                $query->where('recurring_day', "!=" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None");	
+                                $query->where('recurring_day', ">" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None");	
+                            })->get();
+        $pastmeetings = $user->meetings()->where('status', '3')->where(function($query) {
+                                $query->whereDate('start', "<" ,Carbon::today());	
+                            })
+                            ->orWhere(function($query) {
+                                $query->where('recurring_day', "<" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None");	
                             })->get();
         $completedmeeting = $user->meetings()->where('status', '5')->paginate('3');
         return view('meeting.index')->with([
             'meetings' => $meetings, 
             'completedmeeting' => $completedmeeting,
             'todaysmeetings' => $todaysmeetings,
+            'recurringmeetings' => $recurringmeetings,
             'upcomingmeetings' => $upcomingmeetings,
+            'pastmeetings' => $pastmeetings,
             ]);
     }
 

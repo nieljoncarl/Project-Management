@@ -39,6 +39,7 @@ Route::post('/addUserProject','UsersController@addUserProject')->name('users.add
 Route::post('/deleteUserProject','UsersController@deleteUserProject')->name('users.deleteUserProject');
 Route::put('/addReferenceProject/{id}','ProjectsController@addReferenceProject')->name('projects.addReferenceProject');
 Route::put('/addCommentProject/{id}','ProjectsController@addCommentProject')->name('projects.addCommentProject');
+Route::put('/addFileProject/{id}','ProjectsController@addFileProject')->name('projects.addFileProject');
 
 // TASK
 

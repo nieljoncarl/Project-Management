@@ -9,6 +9,7 @@ use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use App\Project;
 use App\Task;
+use App\File;
 use App\Meeting;
 use App\Status;
 
@@ -110,17 +111,21 @@ class ProjectsController extends Controller
         $tasks = Task::where('project_id', $project->id)->get();
         $meetings = Meeting::where('project_id', $project->id)->get();
         $todaysmeetings = Meeting::where(function($query) use ($project) {
-                                $query->whereDate('start', Carbon::today())->where('project_id', $project->id);	
+                                $query->whereDate('start', Carbon::today())->where('project_id', $project->id)->whereBetween('status', ['3','4']);	
                             })
                             ->orWhere(function($query) use ($project) {
-                                $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->where('project_id', $project->id);	
+                                $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->where('project_id', $project->id)->whereBetween('status', ['3','4']);	
                             })->get();
         $upcomingmeetings = Meeting::where(function($query) use ($project) {
-                                $query->whereDate('start', "!=" ,Carbon::today())->where('status','3')->where('project_id', $project->id);	
+                                $query->whereDate('start', ">" ,Carbon::today())->where('status','3')->where('project_id', $project->id);	
                             })
                             ->orWhere(function($query) use ($project) {
-                                $query->where('recurring_day', "!=" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None")->where('project_id', $project->id);	
+                                $query->where('recurring_day', ">" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None")->where('project_id', $project->id);	
                             })->get();
+                            
+        $pastmeetings = Meeting::where(function($query) use ($project) {
+            $query->whereDate('start', "<" ,Carbon::today())->where('project_id', $project->id);	
+        })->get();
         $statuses = Status::all();
         return view('project.show')->with([
             'project' => $project, 
@@ -129,6 +134,7 @@ class ProjectsController extends Controller
             'meetings' => $meetings,
             'todaysmeetings' => $todaysmeetings,
             'upcomingmeetings' => $upcomingmeetings,
+            'pastmeetings' => $pastmeetings,
             'statuses' => $statuses
             ]);
     }
@@ -201,7 +207,8 @@ class ProjectsController extends Controller
         $project->references()->create([
             'user_id' => Auth::id(),
             'name' => $request->input('name'),
-            'body' => $request->input('body')
+            'link' => $request->input('link'),
+            'notes' => $request->input('notes')
         ]);
         $request->session()->flash('success','Reference Added!');
         return redirect()->route('project.show', $project->id."#tab-references");
@@ -237,6 +244,19 @@ class ProjectsController extends Controller
             'body' => $request->input('body')
         ]);
         return redirect()->route('project.show', $project);
+        
+    }
+
+    public function addFileProject(Request $request, $id)
+    {
+        $project = Project::find($id);
+        $project->files()->create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'link' => $request->input('link')
+        ]);
+        return redirect()->route('project.show', $project->id."#tab-files")->with('success','File Added!');
         
     }
 }
