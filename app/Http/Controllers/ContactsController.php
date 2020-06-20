@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
+use Auth;
 
 class ContactsController extends Controller
 {
@@ -17,7 +19,8 @@ class ContactsController extends Controller
      */
     public function index()
     {
-        return view('contact.index');
+        $users = User::where('email','not like', '%tip.edu.ph')->get();
+        return view('contact.index')->with('users', $users);
     }
 
     /**

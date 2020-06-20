@@ -37,9 +37,9 @@ class MeetingsController extends Controller
         })->get();
         $upcomingmeetings = $user->meetings()->where('status', '3')->where(function($query) {
                                 $query->whereDate('start', ">" ,Carbon::today());	
-                            })
-                            ->orWhere(function($query) {
-                                $query->where('recurring_day', ">" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None");	
+                            })->get();
+        $upcomingrecurringmeetings = $user->meetings()->where(function($query) {
+                                $query->where('recurring_day', "!=" ,"None");	
                             })->get();
         $pastmeetings = $user->meetings()->where('status', '3')->where(function($query) {
                                 $query->whereDate('start', "<" ,Carbon::today());	
@@ -54,6 +54,7 @@ class MeetingsController extends Controller
             'todaysmeetings' => $todaysmeetings,
             'recurringmeetings' => $recurringmeetings,
             'upcomingmeetings' => $upcomingmeetings,
+            'upcomingrecurringmeetings' => $upcomingrecurringmeetings,
             'pastmeetings' => $pastmeetings,
             ]);
     }

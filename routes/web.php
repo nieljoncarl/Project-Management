@@ -1,4 +1,5 @@
 <?php
+
 Route::permanentRedirect('/report', '/home');
 Route::get('/', function () {
     return view('welcome');
@@ -27,11 +28,16 @@ Route::resource('/calendar', 'CalendarsController');
 Route::resource('/budget', 'BudgetsController');
 Route::resource('/liquidation', 'LiquidationsController');
 Route::resource('/user', 'UsersController');
-Route::resource('/funding', 'FundingAgenciesController');
+Route::resource('/agency', 'AgenciesController');
 Route::resource('/log', 'LogsController');
 Route::resource('/report', 'ReportsController');
 
 //Project
+
+Route::prefix('project')->name('project.')->middleware('auth')->group(function(){
+    Route::get('/logs/{id}','ProjectsController@getLogs')->name('logs');
+
+});
 
 Route::post('/getUsers','UsersController@getUsers')->name('users.getUsers');
 Route::post('/getUserProject','UsersController@getUserProject')->name('users.getUserProject');

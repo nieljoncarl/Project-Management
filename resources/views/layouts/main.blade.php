@@ -38,13 +38,13 @@
 <body>
     <div id="app"> 
         
-        <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar">
             <div class="app-header header-shadow bg-dark header-text-light">
                 <div class="app-header__logo">
                     <div class="logo-src"></div>
                     <div class="header__pane ml-auto">
                         <div>
-                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic is-active" data-class="closed-sidebar">
                                 <span class="hamburger-box">
                                     <span class="hamburger-inner"></span>
                                 </span>
@@ -499,9 +499,9 @@
                                 @can('manage-officer')
                                     <li class="app-sidebar__heading">Officer Only</li>
                                     <li>
-                                        <a href="{{ route('funding.index') }}" class="{{ Request::is('funding*') ? 'mm-active' : '' }}">
+                                        <a href="{{ route('agency.index') }}" class="{{ Request::is('agency*') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon fa fa-hand-holding-usd"></i>
-                                            Funding Agencies
+                                            Agencies
                                         </a>
                                     </li>
                                     <li>

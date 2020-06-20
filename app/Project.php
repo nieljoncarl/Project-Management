@@ -30,7 +30,7 @@ class Project extends Model
     }
 
     public function funding(){
-        return $this->hasOne('App\User', 'id', 'funding_agency_id');
+        return $this->hasOne('App\Agency', 'id', 'agency_id');
     }
 
     public function users(){

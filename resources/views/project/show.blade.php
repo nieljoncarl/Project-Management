@@ -13,6 +13,48 @@
             <div class="d-inline-block dropdown">
                 <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-primary">
                     <span class="btn-icon-wrapper pr-2 opacity-7">
+                        <i class="fa fa-eye fa-w-20"></i>
+                    </span>
+                    View
+                </button>
+                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(111px, 33px, 0px);">
+                    @can('manage-project', $project)
+                    <a href=" {{route('project.show', $project)}} " tabindex="0" class="dropdown-item">
+                        Summary
+                    </a>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Gantt Chart
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Tasks
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Files
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Meetings
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        References
+                    </button>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Comments
+                    </button>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Inventory
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Reports
+                    </button>
+                    <a href=" {{route('project.logs', $project)}} " tabindex="0" class="dropdown-item">
+                        logs
+                    </a>                   
+                    @endcan
+                </div>
+            </div>
+            <div class="d-inline-block dropdown">
+                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-primary">
+                    <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-tools fa-w-20"></i>
                     </span>
                     Actions
@@ -92,7 +134,7 @@
                                                 {{$project->user->name}}
                                                 <hr>
                                                 <h6><b>Funding Agency:</b></h6>
-                                                @if ($project->funding_agency_id != '')
+                                                @if ($project->agency_id != '')
                                                     {{$project->funding->name}}
                                                 @else
                                                     Not Available
@@ -1145,7 +1187,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="start" class="">Meeting Start Date</label>
+                                <label for="start" class="">Meeting Start Date and Time</label>
                                 <div class="input-group date" id="meeting_start" data-target-input="nearest">
                                     <input type="text" name="meeting_start" class="form-control datetimepicker-input" value="{{old('meeting_start')}}" data-toggle="datetimepicker"  data-target="#meeting_start" readonly/>
                                     <div class="input-group-append" data-target="#meeting_start" data-toggle="datetimepicker" >
@@ -1156,7 +1198,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="position-relative form-group">
-                                <label for="end" class="">Meeting End Date</label>
+                                <label for="end" class="">Meeting End Date and Time</label>
                                 <div class="input-group date" id="meeting_end" data-target-input="nearest">
                                     <input type="text" name="meeting_end" class="form-control datetimepicker-input" value="{{old('meeting_end')}}" data-toggle="datetimepicker"  data-target="#meeting_end" readonly/>
                                     <div class="input-group-append" data-target="#meeting_end" data-toggle="datetimepicker">
@@ -1167,26 +1209,38 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="recurring_day" class="">Recurring Day</label>
-                                <select class="custom-select" name="recurring_day" id="recurring_day">
-                                    <option value="None">None</option>
-                                    <option value="Monday">Monday</option>
-                                    <option value="Tuesday">Tuesday</option>
-                                    <option value="Wednesday">Wednesday</option>
-                                    <option value="Thursday">Thursday</option>
-                                    <option value="Friday">Friday</option>
-                                </select>
+                        <div class="col-md-12">
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="check_recurring" id="check_recurring" onclick="showRecurring()"> Recurring?
+                                </label>
                             </div>
+                            <br>
                         </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="end" class="">Recurring Time</label>
-                                <div class="input-group date" id="recurring_time" data-target-input="nearest">
-                                    <input type="text" name="recurring_time" class="form-control datetimepicker-input" value="{{old('recurring_time')}}" data-toggle="datetimepicker"  data-target="#recurring_time" readonly/>
-                                    <div class="input-group-append" data-target="#recurring_time" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                    </div>
+                    <div id="display_recurring" style="display:none">
+                        <div class="form-row" >
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="recurring_day" class="">Recurring Day</label>
+                                    <select class="custom-select" name="recurring_day" id="recurring_day">
+                                        <option value="None">None</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="end" class="">Recurring Time</label>
+                                    <div class="input-group date" id="recurring_time" data-target-input="nearest">
+                                        <input type="text" name="recurring_time" class="form-control datetimepicker-input" value="{{old('recurring_time')}}" data-toggle="datetimepicker"  data-target="#recurring_time" readonly/>
+                                        <div class="input-group-append" data-target="#recurring_time" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1209,6 +1263,19 @@
                 <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
             </form>
+            
+            <script>
+                function showRecurring () {
+                    var checkBox = document.getElementById("check_recurring");
+                    var display_recurring = document.getElementById("display_recurring");
+                    if (checkBox.checked == true){
+                        display_recurring.style.display = "block";
+                    } else {
+                        display_recurring.style.display = "none";
+                    }
+                }
+            </script>
+
         </div>
     </div>
 </div>
@@ -1292,7 +1359,34 @@
                             </div>
                         </div>
                     </div>    
+                    
                     <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Upload File?  </label>
+                                    Yes <input type="radio" onclick="fileCheck();" name="yesno" id="yesCheck" checked> 
+                                    No <input type="radio" onclick="fileCheck();" name="yesno" id="noCheck">
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function fileCheck() {
+                                if (document.getElementById('yesCheck').checked) 
+                                {
+                                    document.getElementById('file-upload').style.display = 'block';
+                                    document.getElementById('file-link').style.display = 'none';
+                                }
+                                else 
+                                {
+                                    document.getElementById('file-link').style.display = 'block';
+                                    document.getElementById('file-upload').style.display = 'none';
+                                }
+                            
+                            }
+                        </script>
+                    </div>    
+                    <div class="col-md-12" id="file-link" style="display:none">
                         <div class="form-row">
                             <div class="col-md-12">
                                 <div class="position-relative form-group">
@@ -1302,6 +1396,16 @@
                             </div>
                         </div>
                     </div>    
+                    <div class="col-md-12" id="file-upload">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="file" class="">File Upload</label>
+                                    <input name="file" type="file" class="form-control-file">
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
                     <div class="col-md-12">
                         <div class="form-row">
                             <div class="col-md-12">

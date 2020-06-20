@@ -44,6 +44,7 @@ class FilesController extends Controller
         $this->validate($request, [
             'uploadedFiles'=>'required',
         ]);
+        
         if($request->hasFile('uploadedFiles'))
         {
             $allowedfileExtension=['pdf','jpg','png','docx','csv','mp4', 'CSV','PDF','zip','ZIP','exe','EXE','jpeg','xls','xlsx'];

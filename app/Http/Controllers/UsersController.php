@@ -19,7 +19,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('email','like', '%tip.edu.ph')->get();
         return view('user.index')->with('users', $users);
     }
 
