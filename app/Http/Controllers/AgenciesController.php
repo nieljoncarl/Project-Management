@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Company;
 use Auth;
-class CompaniesController extends Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Agency;
+class AgenciesController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -18,10 +15,12 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-        return view('company.index')->with([
-            'companies' => $companies
-        ]);
+        $agencies = Agency::all();
+        return view('agency.index')->with(
+            [
+                "agencies" => $agencies
+            ]
+        );
     }
 
     /**
@@ -51,17 +50,16 @@ class CompaniesController extends Controller
         
         $user = Auth::user()->id;
 
-        $company = new Company;
-        $company->user_id = $user;
-        $company->name = $request->input('name');
-        $company->address = $request->input('address');
-        $company->contact_number = $request->input('contact_number');
-        $company->contact_email = $request->input('contact_email');
-        if($company->save())
+        $agency = new Agency;
+        $agency->user_id = $user;
+        $agency->name = $request->input('name');
+        $agency->address = $request->input('address');
+        $agency->contact_number = $request->input('contact_number');
+        $agency->contact_email = $request->input('contact_email');
+        if($agency->save())
         {
-            return redirect()->route('company.index')->with('success','Company Added!');
+            return redirect()->route('agency.index')->with('success','Agency Added!');
         }
-        
     }
 
     /**
@@ -70,9 +68,9 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show(Agency $agency)
     {
-        return view('company.show')->with('company',$company);
+        return view('agency.show')->with('agency',$agency);
     }
 
     /**
@@ -93,9 +91,26 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $agency)
+    {        
+        $this->validate($request, [
+            'name' => 'required',
+            'address' => 'required',
+        ]);
+
+        
+        $user = Auth::user()->id;
+
+        $agency = Agency::find($agency);
+        $agency->user_id = $user;
+        $agency->name = $request->input('name');
+        $agency->address = $request->input('address');
+        $agency->contact_number = $request->input('contact_number');
+        $agency->contact_email = $request->input('contact_email');
+        if($agency->save())
+        {
+            return redirect()->route('agency.show', $agency)->with('success','Agency Saved!');
+        }
     }
 
     /**

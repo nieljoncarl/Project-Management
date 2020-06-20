@@ -27,11 +27,14 @@ class HomeController extends Controller
         $user = Auth::user();
         
         $todaysmeetings = $user->meetings()->where(function($query) {
-            $query->whereDate('start', Carbon::today());	
-        })
-        ->orWhere(function($query) {
-            $query->where('recurring_day', Carbon::now()->englishDayOfWeek);	
+            $query->whereDate('start', Carbon::today())->whereBetween('status', ['3','4']);	
         })->get();
-        return view('home')->with('user', $user)->with('todaysmeetings', $todaysmeetings);
+        $recurringmeetings = $user->meetings()->where(function($query) {
+            $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->whereBetween('status', ['3','4']);	
+        })->get();
+        return view('home')->with('user', $user)->with([
+            'todaysmeetings' => $todaysmeetings,
+            'recurringmeetings' => $recurringmeetings
+            ]);
     }
 }

@@ -28,12 +28,21 @@ class Project extends Model
     public function user(){
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    public function funding(){
+        return $this->hasOne('App\Agency', 'id', 'agency_id');
+    }
+
     public function users(){
         return $this->belongsToMany('App\User')->withTimestamps()->withPivot('type');
     } 
 
     public function tasks(){
         return $this->belongsToMany('App\Task')->withTimestamps();
+    }
+
+    public function meetings(){
+        return $this->belongsToMany('App\Meeting')->withTimestamps();
     }
 
     public function comments()
@@ -43,7 +52,11 @@ class Project extends Model
     
     public function references()
     {
-        return $this->morphMany(Reference::class, 'commentable');
+        return $this->morphMany(Reference::class, 'referenceable');
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
 }

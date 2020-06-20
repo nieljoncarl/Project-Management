@@ -13,22 +13,19 @@
 </div>    
 @endsection
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    You are logged in!
-                </div>
-            </div>
+<div class="row">
+    @foreach ($users as $user)
+    <div class="col-md-2 mb-4">
+        <div class="mb-3 text-center card card-body">
+            <h5 class="card-title">{{$user->name}}</h5>
+                <p class="card-text"> <a href="mailto:{{ $user->email}}">{{ $user->email}}</a></p>
+                <p class="card-text"> <a href="tel:{{ $user->contact_no}}">{{ $user->contact_no}}</a></p>
+                <p class="card-text"> <a target="__blank" href="https://www.google.com/maps/search/?api=1&query={{ $user->address}}"> {{ $user->address}} </a></p>
+            <button class="btn btn-primary" onclick="location.href='{{route('user.show', $user)}}'" type="button">
+                View
+            </button>
         </div>
     </div>
+    @endforeach
 </div>
 @endsection

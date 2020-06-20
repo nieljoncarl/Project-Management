@@ -9,8 +9,10 @@ use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use App\Project;
 use App\Task;
+use App\File;
 use App\Meeting;
 use App\Status;
+use App\Agency;
 
 class ProjectsController extends Controller
 {
@@ -110,17 +112,21 @@ class ProjectsController extends Controller
         $tasks = Task::where('project_id', $project->id)->get();
         $meetings = Meeting::where('project_id', $project->id)->get();
         $todaysmeetings = Meeting::where(function($query) use ($project) {
-                                $query->whereDate('start', Carbon::today())->where('project_id', $project->id);	
+                                $query->whereDate('start', Carbon::today())->where('project_id', $project->id)->whereBetween('status', ['3','4']);	
                             })
                             ->orWhere(function($query) use ($project) {
-                                $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->where('project_id', $project->id);	
+                                $query->where('recurring_day', Carbon::now()->englishDayOfWeek)->where('project_id', $project->id)->whereBetween('status', ['3','4']);	
                             })->get();
         $upcomingmeetings = Meeting::where(function($query) use ($project) {
-                                $query->whereDate('start', "!=" ,Carbon::today())->where('status','3')->where('project_id', $project->id);	
+                                $query->whereDate('start', ">" ,Carbon::today())->where('status','3')->where('project_id', $project->id);	
                             })
                             ->orWhere(function($query) use ($project) {
-                                $query->where('recurring_day', "!=" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None")->where('project_id', $project->id);	
+                                $query->where('recurring_day', ">" ,Carbon::now()->englishDayOfWeek)->where('recurring_day', "!=" ,"None")->where('project_id', $project->id);	
                             })->get();
+                            
+        $pastmeetings = Meeting::where(function($query) use ($project) {
+            $query->whereDate('start', "<" ,Carbon::today())->where('project_id', $project->id);	
+        })->get();
         $statuses = Status::all();
         return view('project.show')->with([
             'project' => $project, 
@@ -129,6 +135,7 @@ class ProjectsController extends Controller
             'meetings' => $meetings,
             'todaysmeetings' => $todaysmeetings,
             'upcomingmeetings' => $upcomingmeetings,
+            'pastmeetings' => $pastmeetings,
             'statuses' => $statuses
             ]);
     }
@@ -143,8 +150,12 @@ class ProjectsController extends Controller
     {
         $project = Project::find($id);
         $statuses = Status::all();
-        return view('project.edit')->with(['project' => $project, 
-        'statuses' => $statuses]);
+        $agencies = Agency::all();
+        return view('project.edit')->with([
+            'project' => $project, 
+            'statuses' => $statuses,
+            'agencies' => $agencies
+        ]);
     }
 
     /**
@@ -171,6 +182,7 @@ class ProjectsController extends Controller
         $project->description = $request->input('description');
         $project->output = $request->input('output');
         $project->status = $request->input('status');
+        $project->agency_id = $request->input('agency_id');
         $project->start = $request->input('start');
         $project->end = $request->input('end');
         
@@ -197,11 +209,18 @@ class ProjectsController extends Controller
 
     public function addReferenceProject(Request $request, $id)
     {
+        
+        $this->validate($request, [
+            'name' => 'required',
+            'link' => 'required',
+            'notes' => 'required',
+        ]);
         $project = Project::find($id);
         $project->references()->create([
             'user_id' => Auth::id(),
             'name' => $request->input('name'),
-            'body' => $request->input('body')
+            'link' => $request->input('link'),
+            'notes' => $request->input('notes')
         ]);
         $request->session()->flash('success','Reference Added!');
         return redirect()->route('project.show', $project->id."#tab-references");
@@ -238,5 +257,36 @@ class ProjectsController extends Controller
         ]);
         return redirect()->route('project.show', $project);
         
+    }
+
+    public function addFileProject(Request $request, $id)
+    {
+        
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $project = Project::find($id);
+        $project->files()->create([
+            'user_id' => Auth::id(),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'link' => $request->input('link')
+        ]);
+        return redirect()->route('project.show', $project->id."#tab-files")->with('success','File Added!');
+        
+    }
+
+    public function getLogs($project)
+    {        
+        $project = Project::find($project);
+        if(Gate::denies('manage-project', $project)){
+            return redirect(route('project.index'))->with('error','You have no permission to view the logs project');
+        }
+        $logs = Activity::where('subject_type' , 'App\Project')->where('subject_id' , $project->id)->orderby('created_at', 'desc')->get();
+        return view('project.show-logs')->with([
+                                                'project' => $project, 
+                                                'logs' => $logs
+                                                ]);
     }
 }

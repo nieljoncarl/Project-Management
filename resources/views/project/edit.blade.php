@@ -76,6 +76,16 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="">Funding Agency:</label>
+                        <select class="form-control" name="agency_id" id="agency_id">
+                            @foreach ($agencies as $agency)
+                                <option value="{{ $agency->id }}" {{ ( $agency->id == $project->funding_agency_id) ? 'selected' : '' }}> {{ $agency->name }} </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
                     <div class="col-md-12">
                         <div class="position-relative form-group">
                             <label for="project_name" class="">Project Description</label>

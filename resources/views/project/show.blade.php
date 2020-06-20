@@ -13,6 +13,48 @@
             <div class="d-inline-block dropdown">
                 <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-primary">
                     <span class="btn-icon-wrapper pr-2 opacity-7">
+                        <i class="fa fa-eye fa-w-20"></i>
+                    </span>
+                    View
+                </button>
+                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(111px, 33px, 0px);">
+                    @can('manage-project', $project)
+                    <a href=" {{route('project.show', $project)}} " tabindex="0" class="dropdown-item">
+                        Summary
+                    </a>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Gantt Chart
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Tasks
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Files
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Meetings
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        References
+                    </button>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Comments
+                    </button>
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Inventory
+                    </button>     
+                    <button type="button" tabindex="0" class="dropdown-item">
+                        Reports
+                    </button>
+                    <a href=" {{route('project.logs', $project)}} " tabindex="0" class="dropdown-item">
+                        logs
+                    </a>                   
+                    @endcan
+                </div>
+            </div>
+            <div class="d-inline-block dropdown">
+                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-primary">
+                    <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-tools fa-w-20"></i>
                     </span>
                     Actions
@@ -90,6 +132,13 @@
                                                 <hr>
                                                 <h6><b>Project Created By:</b></h6>
                                                 {{$project->user->name}}
+                                                <hr>
+                                                <h6><b>Funding Agency:</b></h6>
+                                                @if ($project->agency_id != '')
+                                                    {{$project->funding->name}}
+                                                @else
+                                                    Not Available
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -317,6 +366,70 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="tab-files" role="tabpanel">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold"></i>Uploaded Files</div>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="scroll-area-lg">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($project->files()->where('location', '!=' ,'')->get() as $file)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a href="{{route('file.show', $file)}}">
+                                                                    <b>{{$file->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                {{ $file->created_at->format('H:i M d, Y')}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title text-capitalize font-weight-bold"></i>Linked Files</div>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="scroll-area-lg">
+                                        <div class="scrollbar-container ps ps--active-y">
+                                            <ul class="todo-list-wrapper list-group list-group-flush ">
+                                                @foreach ($project->files()->where('link', '!=' ,'')->get() as $file)
+                                                <li class="list-group-item">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">
+                                                                <a data-toggle="tooltip" data-original-title="{{$file->description}}" target="_blank"  href="{{$file->link}}">
+                                                                    <b>{{$file->name}}</b>
+                                                                </a>
+                                                            </div>
+                                                            <div class="widget-subheading">
+                                                                {{ $file->created_at->format('H:i M d, Y')}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 400px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 232px;"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane" id="tab-meetings" role="tabpanel">
                     <div class="row">
@@ -404,7 +517,7 @@
                                     <div class="scroll-area-md">
                                         <div class="scrollbar-container ps ps--active-y">
                                             <ul class="todo-list-wrapper list-group list-group-flush ">
-                                                @foreach ($meetings->where('status', '5') as $meeting)
+                                                @foreach ($pastmeetings as $meeting)
                                                 <li class="list-group-item">
                                                     <div class="widget-content-wrapper">
                                                         <div class="widget-content-left">
@@ -500,11 +613,11 @@
                                                                 <div class="widget-heading">
                                                                     {{$reference->user->name}}
                                                                 </div>
-                                                                <div class="widget-subheading">
-                                                                    {{$reference->name}} - {{$reference->created_at}}
+                                                                <div class="widget-subheading" >
+                                                                   {{$reference->name}} - {{$reference->created_at}}
                                                                 </div>
                                                                 <div class="widget-body">
-                                                                    <a href="//{{$reference->body}}">{{$reference->body}}</a>
+                                                                    <a data-toggle="tooltip" data-original-title="{{$reference->notes}}" target="_blank" href="{{$reference->link}}">{{$reference->link}}</a>
                                                                 </div>
                                                             </div>
 
@@ -948,178 +1061,13 @@
 
 @section('modals')
 
-<div class="modal fade addReferenceProject" tabindex="-1" role="dialog" aria-labelledby="addReferenceProject" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <form action="{{ route('projects.addReferenceProject', $project)}}" method="post">
-            @csrf
-            @method('PUT')
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add New Reference</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="position-relative form-group">
-                                    <label for="name" class="">Reference Name</label>
-                                    <input name="name" id="name" placeholder="Reference Name" type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                    <div class="col-md-12">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="position-relative form-group">
-                                    <label for="body" class="">Reference Link</label>
-                                    <input name="body" id="body" placeholder="Reference Link" type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                    <div class="col-md-12">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="position-relative form-group">
-                                    <label for="notes" class="">Reference Notes</label>
-                                    <textarea name="notes" id="notes" placeholder="Reference Notes" class="form-control" rows="5"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade addMeetingProject" tabindex="-1" role="dialog" aria-labelledby="addMeetingProject" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form action="{{ route('meeting.store')}}" method="post" class="">
-            @csrf
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Meeting</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-                <div class="scrollbar-container ps ps--active-y">
-                    @csrf
-                    <input name="project_id" type="hidden" value="{{$project->id}}">
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <div class="position-relative form-group">
-                                <label for="name" class="">Meeting Name</label>
-                                <input name="name" id="name" placeholder="Meeting Name" type="text" value="{{old('name')}}"  class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="link" class="">Meeting Link</label>
-                                <input name="link" id="link" placeholder="Meeting Link" type="text" value="{{old('link')}}"  class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="location" class="">Meeting Location</label>
-                                <input name="location" id="location" placeholder="Meeting Location" type="text" value="{{old('location')}}"  class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="start" class="">Meeting Start Date</label>
-                                <div class="input-group date" id="meeting_start" data-target-input="nearest">
-                                    <input type="text" name="meeting_start" class="form-control datetimepicker-input" value="{{old('meeting_start')}}" data-toggle="datetimepicker"  data-target="#meeting_start" readonly/>
-                                    <div class="input-group-append" data-target="#meeting_start" data-toggle="datetimepicker" >
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="end" class="">Meeting End Date</label>
-                                <div class="input-group date" id="meeting_end" data-target-input="nearest">
-                                    <input type="text" name="meeting_end" class="form-control datetimepicker-input" value="{{old('meeting_end')}}" data-toggle="datetimepicker"  data-target="#meeting_end" readonly/>
-                                    <div class="input-group-append" data-target="#meeting_end" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="recurring_day" class="">Recurring Day</label>
-                                <select class="custom-select" name="recurring_day" id="recurring_day">
-                                    <option value="None">None</option>
-                                    <option value="Monday">Monday</option>
-                                    <option value="Tuesday">Tuesday</option>
-                                    <option value="Wednesday">Wednesday</option>
-                                    <option value="Thursday">Thursday</option>
-                                    <option value="Friday">Friday</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="position-relative form-group">
-                                <label for="end" class="">Recurring Time</label>
-                                <div class="input-group date" id="recurring_time" data-target-input="nearest">
-                                    <input type="text" name="recurring_time" class="form-control datetimepicker-input" value="{{old('recurring_time')}}" data-toggle="datetimepicker"  data-target="#recurring_time" readonly/>
-                                    <div class="input-group-append" data-target="#recurring_time" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-clock"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <div class="position-relative form-group">
-                                <label for="agenda" class="">Meeting Agenda</label>
-                                <textarea name="agenda" id="meeting_agenda" class="form-control">{{old('agenda')}}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade addTaskProject" tabindex="-1" role="dialog" aria-labelledby="addTaskProject" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="{{ route('task.store')}}" method="post" class="">
             @csrf
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
+                <h5 class="modal-title">Add Task</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1133,7 +1081,7 @@
                         <div class="col-md-12">
                             <div class="position-relative form-group">
                                 <label for="name" class="">Task Name</label>
-                                <input name="name" id="name" placeholder="Task Name" type="text" value="{{old('name')}}"  class="form-control">
+                                <input name="name" placeholder="Task Name" type="text" value="{{old('name')}}"  class="form-control">
                             </div>
                         </div>
                     </div>
@@ -1198,4 +1146,284 @@
     </div>
 </div>
 
+<div class="modal fade addMeetingProject" tabindex="-1" role="dialog" aria-labelledby="addMeetingProject" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="{{ route('meeting.store')}}" method="post" class="">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Meeting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="scrollbar-container ps ps--active-y">
+                    @csrf
+                    <input name="project_id" type="hidden" value="{{$project->id}}">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="name" class="">Meeting Name</label>
+                                <input name="name" placeholder="Meeting Name" type="text" value="{{old('name')}}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="link" class="">Meeting Link</label>
+                                <input name="link" id="link" placeholder="Meeting Link" type="text" value="{{old('link')}}"  class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="location" class="">Meeting Location</label>
+                                <input name="location" id="location" placeholder="Meeting Location" type="text" value="{{old('location')}}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="start" class="">Meeting Start Date and Time</label>
+                                <div class="input-group date" id="meeting_start" data-target-input="nearest">
+                                    <input type="text" name="meeting_start" class="form-control datetimepicker-input" value="{{old('meeting_start')}}" data-toggle="datetimepicker"  data-target="#meeting_start" readonly/>
+                                    <div class="input-group-append" data-target="#meeting_start" data-toggle="datetimepicker" >
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="end" class="">Meeting End Date and Time</label>
+                                <div class="input-group date" id="meeting_end" data-target-input="nearest">
+                                    <input type="text" name="meeting_end" class="form-control datetimepicker-input" value="{{old('meeting_end')}}" data-toggle="datetimepicker"  data-target="#meeting_end" readonly/>
+                                    <div class="input-group-append" data-target="#meeting_end" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="check_recurring" id="check_recurring" onclick="showRecurring()"> Recurring?
+                                </label>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div id="display_recurring" style="display:none">
+                        <div class="form-row" >
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="recurring_day" class="">Recurring Day</label>
+                                    <select class="custom-select" name="recurring_day" id="recurring_day">
+                                        <option value="None">None</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="position-relative form-group">
+                                    <label for="end" class="">Recurring Time</label>
+                                    <div class="input-group date" id="recurring_time" data-target-input="nearest">
+                                        <input type="text" name="recurring_time" class="form-control datetimepicker-input" value="{{old('recurring_time')}}" data-toggle="datetimepicker"  data-target="#recurring_time" readonly/>
+                                        <div class="input-group-append" data-target="#recurring_time" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="agenda" class="">Meeting Agenda</label>
+                                <textarea name="agenda" id="meeting_agenda" class="form-control">{{old('agenda')}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+            
+            <script>
+                function showRecurring () {
+                    var checkBox = document.getElementById("check_recurring");
+                    var display_recurring = document.getElementById("display_recurring");
+                    if (checkBox.checked == true){
+                        display_recurring.style.display = "block";
+                    } else {
+                        display_recurring.style.display = "none";
+                    }
+                }
+            </script>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade addReferenceProject" tabindex="-1" role="dialog" aria-labelledby="addReferenceProject" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="{{ route('projects.addReferenceProject', $project)}}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add New Reference</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Reference Name</label>
+                                    <input name="name" placeholder="Reference Name" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="link" class="">Reference Link</label>
+                                    <input name="link" placeholder="Reference Link" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="notes" class="">Reference Notes</label>
+                                    <textarea name="notes" placeholder="Reference Notes" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade addFileProject" tabindex="-1" role="dialog" aria-labelledby="addFileProject" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="{{ route('projects.addFileProject', $project)}}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">File Name</label>
+                                    <input name="name" placeholder="File Name" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Upload File?  </label>
+                                    Yes <input type="radio" onclick="fileCheck();" name="yesno" id="yesCheck" checked> 
+                                    No <input type="radio" onclick="fileCheck();" name="yesno" id="noCheck">
+                                </div>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function fileCheck() {
+                                if (document.getElementById('yesCheck').checked) 
+                                {
+                                    document.getElementById('file-upload').style.display = 'block';
+                                    document.getElementById('file-link').style.display = 'none';
+                                }
+                                else 
+                                {
+                                    document.getElementById('file-link').style.display = 'block';
+                                    document.getElementById('file-upload').style.display = 'none';
+                                }
+                            
+                            }
+                        </script>
+                    </div>    
+                    <div class="col-md-12" id="file-link" style="display:none">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="link" class="">File Link</label>
+                                    <input name="link" placeholder="File Link" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12" id="file-upload">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="file" class="">File Upload</label>
+                                    <input name="file" type="file" class="form-control-file">
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="description" class="">File Description</label>
+                                    <textarea name="description" id="file_description" placeholder="File Description" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

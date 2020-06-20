@@ -7,10 +7,10 @@
                 <i class="fa fa-hand-holding-usd icon-gradient bg-plum-plate">
                 </i>
             </div>
-            <div> {{ $company->name }} </div>
+            <div> {{ $agency->name }} </div>
         </div>
         <div class="page-title-actions">
-            <button type="button" tabindex="0" class="btn-shadow mr-3 btn btn-dark" data-toggle="modal" data-target=".modifycompany">
+            <button type="button" tabindex="0" class="btn-shadow mr-3 btn btn-dark" data-toggle="modal" data-target=".modifyAgency">
                 <i class="fa fa-edit"></i>
             </button>
         </div>
@@ -22,11 +22,11 @@
 <div class="row">
     <div class="col-md-3 mb-4">
         <div class="card mb-4" style="width: 100%;">
-            <img class="card-img-top" src="{{asset('images/building-solid.svg')}}" style="max-height: 10rem; margin-top: 4rem" alt="company Photo">
+            <img class="card-img-top" src="{{asset('images/hand-holding-usd-solid.svg')}}" style="max-height: 10rem; margin-top: 4rem" alt="agency Photo">
             <div class="card-body text-center">
-              <p class="card-text"> <a href="mailto:{{ $company->email}}">{{ $company->email}}</a></p>
-              <p class="card-text"> <a href="tel:{{ $company->contact_no}}">{{ $company->contact_no}}</a></p>
-              <p class="card-text"> <a target="__blank" href="https://www.google.com/maps/search/?api=1&query={{ $company->address}}"> {{ $company->address}} </a></p>
+              <p class="card-text"> Email Address: <br> <b> <a href="mailto:{{ $agency->contact_email}}">{{ $agency->contact_email}}</a> </b> </p>
+              <p class="card-text"> Contact Number: <br> <b> <a href="tel:{{ $agency->contact_number}}">{{ $agency->contact_number}}</a> </b> </p>
+              <p class="card-text"> Address: <br> <a target="__blank" href="https://www.google.com/maps/search/?api=1&query={{ $agency->address}}"> {{ $agency->address}} </a></p>
             </div>
         </div>
         @can('manage-officer')
@@ -73,7 +73,7 @@
                             <table class="align-middle mb-0 table table-borderless table-hover">
                                 <div class="table-responsive">
                                     <tbody>
-                                        {{-- @foreach ($company->projects() as $project)
+                                        @foreach ($agency->projects() as $project)
                                         <tr>
                                             <td>
                                                 <div class="widget-content p-0">
@@ -86,7 +86,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </div>
                             </table>
@@ -97,8 +97,7 @@
             <div class="col-md-6">
                 <div class="main-card mb-3 card">
                     <div class="card-header">
-                        Personnel
-                        
+                        <div class="card-header-title">Personnel</div>
                         <div class="btn-actions-pane-right text-capitalize actions-icon-btn">
                             <div class="btn-group dropdown">
                                 <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="btn-icon btn-icon-only btn btn-link">
@@ -130,7 +129,7 @@
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                 <div class="table-responsive">
                                     <tbody>
-                                        @foreach ($company->users()->get() as $user)
+                                        @foreach ($agency->users()->get() as $user)
                                         
                                         <tr>
                                             <td>
@@ -159,60 +158,68 @@
 
 @section('modals')
 
-@endsection
-
-@section('scripts')
-    
-<script type="text/javascript">
-    $(function () {
-
-        $('#start1').datetimepicker({
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $('#end1').datetimepicker({
-            useCurrent: false,
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $("#start1").on("change.datetimepicker", function (e) {
-            $('#end1').datetimepicker('minDate', e.date);
-        });
-        $("#end1").on("change.datetimepicker", function (e) {
-            $('#start1').datetimepicker('maxDate', e.date);
-        });
-        // START2
-        $('#start2').datetimepicker({
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $('#end2').datetimepicker({
-            useCurrent: false,
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $("#start2").on("change.datetimepicker", function (e) {
-            $('#end2').datetimepicker('minDate', e.date);
-        });
-        $("#end2").on("change.datetimepicker", function (e) {
-            $('#start2').datetimepicker('maxDate', e.date);
-        });
-        // START3
-        $('#start3').datetimepicker({
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $('#end3').datetimepicker({
-            useCurrent: false,
-            format:'YYYY-MM-DD HH:mm:ss',
-            ignoreReadonly: true
-        });
-        $("#start3").on("change.datetimepicker", function (e) {
-            $('#end3').datetimepicker('minDate', e.date);
-        });
-        $("#end3").on("change.datetimepicker", function (e) {
-            $('#start3').datetimepicker('maxDate', e.date);
-        });
-    });
-</script>
+<div class="modal fade modifyAgency" tabindex="-1" role="dialog" aria-labelledby="addNewAgency" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form action="{{ route('agency.update', $agency)}}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title">Modify Agency</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Agency Name</label>
+                                    <input name="name" placeholder="Full Agency Name" value="{{ $agency->name }}" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="address" class="">Address</label>
+                                    <input name="address" placeholder="Address Searchable on Google Maps" value="{{ $agency->address }}"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Agency Email Address</label>
+                                    <input name="contact_email" placeholder="Primary Agency Email Address" value="{{ $agency->contact_email }}"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label for="name" class="">Agency Contact Number</label>
+                                    <input name="contact_number" placeholder="Primary Agency Contact Number" value="{{ $agency->contact_number }}"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
