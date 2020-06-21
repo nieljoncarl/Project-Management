@@ -24,10 +24,10 @@
                     </a>     
                     <button type="button" tabindex="0" class="dropdown-item">
                         Gantt Chart
-                    </button>     
-                    <button type="button" tabindex="0" class="dropdown-item">
+                    </button>    
+                    <a href=" {{route('project.tasks', $project)}} " tabindex="0" class="dropdown-item">
                         Tasks
-                    </button>     
+                    </a>             
                     <button type="button" tabindex="0" class="dropdown-item">
                         Files
                     </button>     
@@ -47,7 +47,7 @@
                         Reports
                     </button>
                     <a href=" {{route('project.logs', $project)}} " tabindex="0" class="dropdown-item">
-                        logs
+                        Logs
                     </a>                   
                     @endcan
                 </div>

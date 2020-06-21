@@ -36,6 +36,7 @@ Route::resource('/report', 'ReportsController');
 
 Route::prefix('project')->name('project.')->middleware('auth')->group(function(){
     Route::get('/logs/{id}','ProjectsController@getLogs')->name('logs');
+    Route::get('/tasks/{id}','ProjectsController@getTasks')->name('tasks');
 
 });
 
