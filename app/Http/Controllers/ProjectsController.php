@@ -289,4 +289,17 @@ class ProjectsController extends Controller
                                                 'logs' => $logs
                                                 ]);
     }
+
+    public function getTasks($project)
+    {        
+        $project = Project::find($project);
+        if(Gate::denies('manage-project', $project)){
+            return redirect(route('project.index'))->with('error','You have no permission to view the logs project');
+        }
+        $tasks = Task::where('project_id', $project->id)->get();
+        return view('project.show-tasks')->with([
+                                                'project' => $project, 
+                                                'tasks' => $tasks
+                                                ]);
+    }
 }

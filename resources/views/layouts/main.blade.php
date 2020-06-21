@@ -10,12 +10,9 @@
     <!-- Scripts -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" /> --}}
 
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/jquery-ui.min.js') }}" defer></script>
-    {{-- <script src="{{ asset('js/perfect-scrollbar.jquery.min.js') }}" defer></script> --}}
     <script src="{{ asset('js/tempusdominus-bootstrap-4.min.js') }}" defer></script>
     <script src="//cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     
@@ -44,7 +41,7 @@
                     <div class="logo-src"></div>
                     <div class="header__pane ml-auto">
                         <div>
-                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic is-active" data-class="closed-sidebar">
+                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
                                 <span class="hamburger-box">
                                     <span class="hamburger-inner"></span>
                                 </span>

@@ -4,7 +4,7 @@
     <div class="page-title-wrapper">
         <div class="page-title-heading">
             <div class="page-title-icon">
-                <i class="pe-7s-users icon-gradient bg-plum-plate">
+                <i class="fa fa-database icon-gradient bg-plum-plate">
                 </i>
             </div>
             <div>Logs: {{$project->name}}</div>
@@ -25,9 +25,9 @@
                     <button type="button" tabindex="0" class="dropdown-item">
                         Gantt Chart
                     </button>     
-                    <button type="button" tabindex="0" class="dropdown-item">
+                    <a href=" {{route('project.tasks', $project)}} " tabindex="0" class="dropdown-item">
                         Tasks
-                    </button>     
+                    </a>     
                     <button type="button" tabindex="0" class="dropdown-item">
                         Files
                     </button>     
@@ -57,7 +57,6 @@
 </div>    
 @endsection
 @section('content')
-<div class="container">
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="card-hover-shadow-2x mb-3 card">
@@ -65,7 +64,7 @@
                     <div class="card-header-title">General Logs</div>
                 </div>
                 <div class="card-body">
-                    <div class="scroll-area-xl scrollhere">
+                    <div class="scroll-area-xl" style="height: 60vh">
                         <div class="scrollbar-container ps ps--active-y">
                             <ul class="todo-list-wrapper list-group list-group-flush">
                                 @foreach ($logs as $log)
@@ -101,7 +100,7 @@
                     <div class="card-header-title">Task Related Logs</div>
                 </div>
                 <div class="card-body">
-                    <div class="scroll-area-xl scrollhere">
+                    <div class="scroll-area-xl" style="height: 60vh">
                         <div class="scrollbar-container ps ps--active-y">
                             <ul class="todo-list-wrapper list-group list-group-flush">
                                 @foreach ($logs as $log)
@@ -133,5 +132,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
